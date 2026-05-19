@@ -6,6 +6,8 @@
     <title>@yield('title', 'AI-Solutions | Precision in Automation')</title>
     
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- <script src="{{ asset('js/canvasparticles.js') }}" defer></script> -->
+     <script src="https://cdn.jsdelivr.net/npm/canvasparticles-js@latest/dist/index.umd.min.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -148,7 +150,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            z-index: -1;
+            z-index: -3;
             background: 
                 radial-gradient(circle at 50% 50%, rgba(114, 254, 127, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 80% 20%, rgba(0, 110, 34, 0.03) 0%, transparent 30%),
@@ -156,6 +158,33 @@
             background-color: #f8f9ff;
             animation: gradientMove 25s ease-in-out infinite alternate;
             pointer-events: none;
+        }
+
+        /* Unscrollable Canvas Particles background */
+        #bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Allow particle background to show through solid section backgrounds in the white spaces */
+        section.bg-surface,
+        div.bg-surface,
+        section.bg-surface-container-lowest,
+        div.bg-surface-container-lowest {
+            background-color: transparent !important;
+        }
+        
+        .bg-surface-container,
+        .bg-surface-container-low,
+        .bg-surface-container-high {
+            background-color: rgba(235, 238, 247, 0.6) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         @keyframes gradientMove {
@@ -209,10 +238,9 @@
 </head>
 <body class="text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen overflow-x-hidden">
     <div id="cursor-follower"></div>
+    <canvas id="bg-particles"></canvas>
     
-    <div data-aos="fade-down" data-aos-duration="1000">
-        @include('front.partials.header')
-    </div>
+    @include('front.partials.header')
 
     <main>
         @yield('content')
@@ -242,6 +270,24 @@
                 follower.style.top = e.clientY + 'px';
             });
         }
+
+        // Initialize Canvas Particles Background
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof CanvasParticles !== 'undefined') {
+                new CanvasParticles('#bg-particles', {
+                    particles: {
+                        color: 'rgba(21, 203, 58, 0.45)', // Premium green theme matching the screenshot (#15cb3a)
+                        ppm: 100,                        // Particles Density
+                        connectDistance: 130,           // Connections range
+                        relSpeed: 0.6,                  // Slow, elegant float speed
+                        relSize: 1.2                    // Slightly larger particles for nice aesthetics
+                    },
+                    mouse: {
+                        interactionType: 0              // NONE: Disables shifting/movement on hover (immovable on hover)
+                    }
+                }).start();
+            }
+        });
     </script>
 </body>
 </html>
