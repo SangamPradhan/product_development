@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Project;
 
 class FrontController extends Controller
 {
     public function home()
     {
-        return view('welcome');
+        $featuredProject = Project::where('is_featured', true)->where('status', 'Active')->orderBy('created_at', 'desc')->first();
+        return view('welcome', compact('featuredProject'));
     }
 
     public function about()
@@ -23,12 +25,21 @@ class FrontController extends Controller
 
     public function projects()
     {
-        return view('front.pages.projects');
+        $projects = Project::orderBy('created_at', 'desc')->get();
+        return view('front.pages.projects', compact('projects'));
     }
 
-    public function projectDetail()
+    public function projectDetail($slug)
     {
-        return view('front.pages.project_detail');
+        $project = Project::where('slug', $slug)->firstOrFail();
+        
+        // Also fetch related projects (e.g. latest 3 other projects)
+        $relatedProjects = Project::where('id', '!=', $project->id)
+                                  ->orderBy('created_at', 'desc')
+                                  ->take(3)
+                                  ->get();
+                                  
+        return view('front.pages.project_detail', compact('project', 'relatedProjects'));
     }
 
     public function events()
