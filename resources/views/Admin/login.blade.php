@@ -131,6 +131,16 @@
                 </div>
             @endif
 
+            @if (session('warning'))
+                <div class="mb-6 p-4 rounded-lg bg-tertiary-container text-on-tertiary-container border border-tertiary/20 font-label-sm text-sm" role="alert">
+                    <div class="flex items-center gap-2 font-bold mb-1">
+                        <span class="material-symbols-outlined text-base">schedule</span>
+                        SESSION EXPIRED
+                    </div>
+                    {{ session('warning') }}
+                </div>
+            @endif
+
             @if (session('success'))
                 <div class="mb-6 p-4 rounded-lg bg-secondary-container text-on-secondary-container border border-secondary/20 font-label-sm text-sm" role="alert">
                     <div class="flex items-center gap-2 font-bold mb-1">

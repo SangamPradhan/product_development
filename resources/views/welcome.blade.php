@@ -261,46 +261,7 @@
                     href="{{ route('front.projects') }}">View all projects</a>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- Project 1 -->
-                @if(isset($featuredProject))
-                <a href="{{ route('front.project.detail', $featuredProject->slug) }}" class="md:col-span-2 md:row-span-2 angled-notch bg-surface-container p-1 border border-outline-variant/30 group hover-glow block" data-aos="zoom-in">
-                    <div class="relative overflow-hidden h-[400px]">
-                        @if($featuredProject->featured_image_url)
-                        <img alt="{{ $featuredProject->title }}"
-                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 peek-effect"
-                             src="{{ $featuredProject->featured_image_url }}" />
-                        @else
-                        <div class="w-full h-full bg-secondary/10 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500">
-                            <span class="material-symbols-outlined text-secondary text-6xl">folder_special</span>
-                        </div>
-                        @endif
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-on-surface/80 to-transparent text-white">
-                            <span class="font-label-sm text-label-sm text-secondary-fixed mb-2 block uppercase">{{ $featuredProject->type ?? 'Project' }}</span>
-                            <h3 class="font-headline-md text-headline-md">{{ $featuredProject->title }}</h3>
-                            <p class="font-body-md text-body-md text-surface-variant mt-2 line-clamp-2">{{ $featuredProject->description ?? $featuredProject->subtitle }}</p>
-                        </div>
-                    </div>
-                </a>
-                @else
-                <div
-                    class="md:col-span-2 md:row-span-2 angled-notch bg-surface-container p-1 border border-outline-variant/30 group hover-glow" data-aos="zoom-in">
-                    <div class="relative overflow-hidden h-[400px]">
-                        <img alt="Robotics project"
-                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 peek-effect"
-                            data-alt="A minimalist laboratory scene with a sleek white robotic arm interacting with glowing digital holograms. The environment is high-key white with secondary green accents, representing future automation. The overall mood is intelligent, clean, and extremely professional."
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaX61xqhGRh8lyhWVkHDrYuI-3sfScyQw95N9cU51u5ODdUT71a_PoAOHaBGHQMSyYJVjf2ICvPhsQa_tUtMCQi1NZOCu0BIqhdINtrZfNjBuEMhhk0FBx3J7fkIfJyLjZUhT_nfByl4hngI68rdds8JDsQxyzfciT2vmLutpmkXsjs8U_K0bW9DZd-PNI750DeDSrCtfdrj3Re7IIhEsgUyv4BmGbwMMfD6Qnk_HuIXQ0vFMGlSoFjIiBbaYt4x5mR2Y4XQCZyJo" />
-                        <div
-                            class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-on-surface/80 to-transparent text-white">
-                            <span class="font-label-sm text-label-sm text-secondary-fixed mb-2 block uppercase">Case
-                                Study</span>
-                            <h3 class="font-headline-md text-headline-md">Automating Global Logistics</h3>
-                            <p class="font-body-md text-body-md text-surface-variant mt-2">How 15 AI agents managed a fleet
-                                of 200 autonomous vessels.</p>
-                        </div>
-                    </div>
-                </div>
-                @endif
+                <div id="home-featured-project" class="md:col-span-2 md:row-span-2"></div>
                 <!-- Event 1 -->
                 <div
                     class="md:col-span-2 bg-secondary-container p-8 rounded-xl border border-outline-variant/30 flex flex-col justify-between hover-glow" data-aos="fade-left" data-aos-delay="100">
@@ -400,3 +361,13 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+    window.frontProjectConfig = {
+        projectDetailBase: @json(url('/projects')),
+    };
+</script>
+<script src="{{ asset('js/laravel-api.js') }}"></script>
+<script src="{{ asset('js/front-projects.js') }}"></script>
+@endpush

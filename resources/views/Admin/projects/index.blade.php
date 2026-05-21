@@ -1,109 +1,60 @@
-@extends('Admin.templates.index')
+@extends('Admin.layouts.app')
 
-@section('table_headers')
-    <th class="px-8 py-5 font-bold">Project Details</th>
-    <th class="px-6 py-5 font-bold">Status</th>
-    <th class="px-6 py-5 font-bold">Client</th>
-    <th class="px-6 py-5 font-bold">Tags</th>
+@section('title', 'Manage Projects')
+
+@section('content')
+<div id="api-alert" class="hidden mb-8 p-4 rounded-xl border font-label-sm text-sm flex items-center justify-between shadow-sm">
+    <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined">info</span>
+        <span data-alert-message></span>
+    </div>
+    <button class="material-symbols-outlined hover:scale-110" type="button" onclick="this.parentElement.classList.add('hidden')">close</button>
+</div>
+
+<div class="flex justify-between items-end mb-12">
+    <div>
+        <h1 class="font-headline-lg text-headline-lg text-on-surface leading-none mb-2">Manage Projects</h1>
+        <p class="text-on-surface-variant font-label-sm uppercase tracking-wider">System Intelligence &amp; Active Deployments</p>
+    </div>
+    <a href="{{ route('admin.projects.create') }}" class="bg-primary text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary/95 transition-all active:scale-95 shadow-sm font-label-sm text-sm uppercase tracking-wider">
+        <span class="material-symbols-outlined">add</span>
+        <span>Add New Project</span>
+    </a>
+</div>
+
+<div class="flex flex-wrap items-center gap-4 mb-8 bg-surface-container-low p-4 rounded-xl border border-outline/50">
+    <div class="ml-auto text-on-surface-variant font-label-sm text-[10px] uppercase tracking-widest">
+        Showing <span id="projects-count">0</span> elements
+    </div>
+</div>
+
+<div class="bg-surface border border-outline angled-notch relative overflow-x-auto">
+    <table class="w-full text-left border-collapse min-w-[700px]">
+        <thead>
+            <tr class="bg-surface-variant/30 text-on-surface-variant font-label-sm border-b border-outline uppercase tracking-wider">
+                <th class="px-8 py-5 font-bold">Project Details</th>
+                <th class="px-6 py-5 font-bold">Status</th>
+                <th class="px-6 py-5 font-bold">Client</th>
+                <th class="px-6 py-5 font-bold">Tags</th>
+                <th class="px-8 py-5 font-bold text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="projects-table-body" class="divide-y divide-outline">
+            <tr>
+                <td colspan="5" class="px-8 py-10 text-center text-on-surface-variant">Loading projects...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 @endsection
 
-@section('table_rows')
-    @forelse($items as $item)
-        <tr class="group hover:bg-surface-variant/10 transition-colors">
-            <!-- Details -->
-            <td class="px-8 py-6">
-                <div class="flex items-center gap-4">
-                    @if($item->featured_image_url)
-                        <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                            <img src="{{ $item->featured_image_url }}" alt="{{ $item->title }}" class="w-full h-full object-cover">
-                        </div>
-                    @else
-                        <div class="w-16 h-16 rounded-lg bg-secondary-container flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary-container">folder_special</span>
-                        </div>
-                    @endif
-                    <div>
-                        <h4 class="font-bold text-on-surface">{{ $item->title }}</h4>
-                        <p class="text-xs text-secondary mt-1 font-bold">{{ $item->type }}</p>
-                        <p class="text-sm text-on-surface-variant line-clamp-1 mt-1">{{ $item->subtitle }}</p>
-                    </div>
-                </div>
-            </td>
-            
-            <!-- Status Badge -->
-            <td class="px-6 py-6">
-                @if($item->status == 'Active')
-                    <span class="px-3 py-1 rounded-full bg-primary-container/20 text-on-primary-container font-label-sm text-[10px] uppercase font-bold">
-                        Active
-                    </span>
-                @elseif($item->status == 'In Progress')
-                    <span class="px-3 py-1 rounded-full bg-secondary-container/40 text-on-secondary-container font-label-sm text-[10px] uppercase font-bold">
-                        In Progress
-                    </span>
-                @else
-                    <span class="px-3 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-[10px] uppercase font-bold">
-                        {{ $item->status ?? 'Paused' }}
-                    </span>
-                @endif
-                
-                @if($item->is_featured)
-                    <div class="mt-2">
-                        <span class="px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[9px] uppercase font-bold">
-                            Featured
-                        </span>
-                    </div>
-                @endif
-            </td>
-            
-            <!-- Client -->
-            <td class="px-6 py-6 text-sm text-on-surface">
-                {{ $item->client ?? '-' }}
-            </td>
-            
-            <!-- Tags -->
-            <td class="px-6 py-6">
-                <div class="flex flex-wrap gap-1">
-                    @if($item->tags)
-                        @foreach(explode(',', $item->tags) as $tag)
-                            <span class="px-2 py-0.5 rounded border border-outline text-on-surface-variant font-label-sm text-[10px] uppercase">
-                                {{ trim($tag) }}
-                            </span>
-                        @endforeach
-                    @else
-                        -
-                    @endif
-                </div>
-            </td>
-            
-            <!-- Action buttons -->
-            <td class="px-8 py-6 text-right">
-                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <!-- View Frontend Action -->
-                    <a href="{{ route('front.project.detail', $item->slug) }}" target="_blank" class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant transition-colors" title="View Project">
-                        <span class="material-symbols-outlined text-base">visibility</span>
-                    </a>
-
-                    <!-- Edit Action -->
-                    <a href="{{ route('admin.projects.edit', $item->id) }}" class="p-2 hover:bg-secondary-container rounded-lg text-primary transition-colors">
-                        <span class="material-symbols-outlined text-base">edit</span>
-                    </a>
-                    
-                    <!-- Delete Action -->
-                    <form action="{{ route('admin.projects.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this project?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
-                            <span class="material-symbols-outlined text-base">delete</span>
-                        </button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="5" class="px-8 py-10 text-center text-on-surface-variant font-label-sm uppercase">
-                No projects found.
-            </td>
-        </tr>
-    @endforelse
-@endsection
+@push('scripts')
+<script>
+    window.adminProjectRoutes = {
+        index: @json(route('admin.projects.index')),
+        edit: @json(url('/admin/projects')),
+        frontDetail: @json(url('/projects')),
+    };
+</script>
+<script src="{{ asset('js/admin-projects.js') }}"></script>
+@endpush
