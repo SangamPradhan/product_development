@@ -262,6 +262,27 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Project 1 -->
+                @if(isset($featuredProject))
+                <a href="{{ route('front.project.detail', $featuredProject->slug) }}" class="md:col-span-2 md:row-span-2 angled-notch bg-surface-container p-1 border border-outline-variant/30 group hover-glow block" data-aos="zoom-in">
+                    <div class="relative overflow-hidden h-[400px]">
+                        @if($featuredProject->featured_image_url)
+                        <img alt="{{ $featuredProject->title }}"
+                             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 peek-effect"
+                             src="{{ $featuredProject->featured_image_url }}" />
+                        @else
+                        <div class="w-full h-full bg-secondary/10 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500">
+                            <span class="material-symbols-outlined text-secondary text-6xl">folder_special</span>
+                        </div>
+                        @endif
+                        <div
+                            class="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-on-surface/80 to-transparent text-white">
+                            <span class="font-label-sm text-label-sm text-secondary-fixed mb-2 block uppercase">{{ $featuredProject->type ?? 'Project' }}</span>
+                            <h3 class="font-headline-md text-headline-md">{{ $featuredProject->title }}</h3>
+                            <p class="font-body-md text-body-md text-surface-variant mt-2 line-clamp-2">{{ $featuredProject->description ?? $featuredProject->subtitle }}</p>
+                        </div>
+                    </div>
+                </a>
+                @else
                 <div
                     class="md:col-span-2 md:row-span-2 angled-notch bg-surface-container p-1 border border-outline-variant/30 group hover-glow" data-aos="zoom-in">
                     <div class="relative overflow-hidden h-[400px]">
@@ -279,6 +300,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 <!-- Event 1 -->
                 <div
                     class="md:col-span-2 bg-secondary-container p-8 rounded-xl border border-outline-variant/30 flex flex-col justify-between hover-glow" data-aos="fade-left" data-aos-delay="100">
