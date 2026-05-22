@@ -71,4 +71,16 @@ class Project extends Model
         }
         return null;
     }
+
+    /**
+     * Get the full URL for the featured image.
+     */
+    // public function featuredImageUrl(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->featured_image
+    //             ? Storage::disk('public')->url('projects/' . $this->featured_image)
+    //             : null,
+    //     );
+    // }
 }
