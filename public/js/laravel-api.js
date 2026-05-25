@@ -2,7 +2,18 @@
  * Shared fetch helper for Laravel JSON API (session + CSRF).
  */
 window.LaravelApi = {
-    baseUrl: '/api',
+    resolveBaseUrl() {
+        if (window.__APP__?.apiBase) {
+            return String(window.__APP__.apiBase).replace(/\/$/, '');
+        }
+
+        const link = document.querySelector('link[rel="api-base"]');
+        if (link?.href) {
+            return link.href.replace(/\/$/, '');
+        }
+        // Fallback to origin/api for both admin and front routes
+        return `${window.location.origin}/api`;
+    },
 
     csrfToken() {
         return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
@@ -23,7 +34,9 @@ window.LaravelApi = {
             headers['X-CSRF-TOKEN'] = this.csrfToken();
         }
 
-        const response = await fetch(`${this.baseUrl}${path}`, {
+        const baseUrl = this.resolveBaseUrl();
+        const endpoint = path.startsWith('/') ? path : `/${path}`;
+        const response = await fetch(`${baseUrl}${endpoint}`, {
             credentials: 'same-origin',
             ...options,
             headers,
@@ -34,13 +47,14 @@ window.LaravelApi = {
             ? await response.json()
             : null;
 
-        if (response.status === 401) {
-            window.location.href = '/admin/login';
+        if (response.status === 401 && window.location.pathname.includes('/admin')) {
+            const login = document.querySelector('meta[name="admin-login-url"]')?.content;
+            window.location.href = login || '/admin/login';
             throw new Error('Unauthenticated.');
         }
 
         if (!response.ok) {
-            const error = new Error(payload?.message || 'Request failed.');
+            const error = new Error(payload?.message || `Request failed (${response.status}).`);
             error.status = response.status;
             error.payload = payload;
             throw error;
