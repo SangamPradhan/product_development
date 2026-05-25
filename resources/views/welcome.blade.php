@@ -361,13 +361,3 @@
         </div>
     </section>
 @endsection
-
-@push('scripts')
-<script>
-    window.frontProjectConfig = {
-        projectDetailBase: @json(url('/projects')),
-    };
-</script>
-<script src="{{ asset('js/laravel-api.js') }}"></script>
-<script src="{{ asset('js/front-projects.js') }}"></script>
-@endpush
