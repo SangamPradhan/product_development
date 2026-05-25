@@ -3,6 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <script>
+        window.__APP__ = {
+            apiBase: @json('/api'),
+            projectsBase: @json('/projects'),
+            assetBase: @json('/'),
+        };
+    </script>
     <title>@yield('title', 'AI-Solutions | Precision in Automation')</title>
     
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -250,8 +259,15 @@
         @include('front.partials.footer')
     </div>
 
+    <!-- Load laravel-api.js FIRST (before other scripts that depend on it) -->
+    <script src="{{ asset('js/laravel-api.js') }}"></script>
+    
+    <!-- Stack for any additional scripts from child views -->
     @stack('scripts')
     
+    <!-- Load front-projects.js AFTER laravel-api.js is available -->
+    <script src="{{ asset('js/front-projects.js') }}"></script>
+
     <!-- AOS Animation JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -276,14 +292,14 @@
             if (typeof CanvasParticles !== 'undefined') {
                 new CanvasParticles('#bg-particles', {
                     particles: {
-                        color: 'rgba(21, 203, 58, 0.45)', // Premium green theme matching the screenshot (#15cb3a)
-                        ppm: 100,                        // Particles Density
-                        connectDistance: 130,           // Connections range
-                        relSpeed: 0.6,                  // Slow, elegant float speed
-                        relSize: 1.2                    // Slightly larger particles for nice aesthetics
+                        color: 'rgba(21, 203, 58, 0.45)',
+                        ppm: 100,
+                        connectDistance: 130,
+                        relSpeed: 0.6,
+                        relSize: 1.2
                     },
                     mouse: {
-                        interactionType: 0              // NONE: Disables shifting/movement on hover (immovable on hover)
+                        interactionType: 0
                     }
                 }).start();
             }
