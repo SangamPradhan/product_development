@@ -7,9 +7,9 @@
     
     <script>
         window.__APP__ = {
-            apiBase: @json('/api'),
-            projectsBase: @json('/projects'),
-            assetBase: @json('/'),
+            apiBase: @json(url('/api')),
+            projectsBase: @json(url('/projects')),
+            assetBase: @json(url('/')),
         };
     </script>
     <title>@yield('title', 'AI-Solutions | Precision in Automation')</title>

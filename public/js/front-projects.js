@@ -263,8 +263,43 @@
         }
 
         if (typeof AOS !== 'undefined') {
-            AOS.refresh();
+            setTimeout(() => {
+                AOS.init();
+            }, 100);
         }
+    }
+
+    function setupFilters(projects, gridEl) {
+        const filterContainer = document.getElementById('filter-container');
+        if (!filterContainer) return;
+
+        const buttons = filterContainer.querySelectorAll('button[data-filter]');
+        buttons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                // Update active classes
+                buttons.forEach((b) => {
+                    b.classList.remove('font-bold', 'text-secondary');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('font-bold', 'text-secondary');
+                btn.classList.remove('text-on-surface-variant');
+
+                const filter = btn.getAttribute('data-filter');
+                if (filter === 'all') {
+                    renderGrid(projects, gridEl);
+                } else {
+                    const filtered = projects.filter((p) => (p.type || '').toLowerCase() === filter);
+                    renderGrid(filtered, gridEl);
+                }
+
+                // Re-init AOS to scan the new dynamic DOM elements
+                if (typeof AOS !== 'undefined') {
+                    setTimeout(() => {
+                        AOS.init();
+                    }, 50);
+                }
+            });
+        });
     }
 
     async function initListPage() {
@@ -286,13 +321,16 @@
                 const featured = projects.find((p) => isFeatured(p)) || projects[0];
                 renderFeatured(featured, featuredEl);
                 renderGrid(projects, gridEl);
+                setupFilters(projects, gridEl);
             } catch (renderErr) {
                 console.error('Error rendering projects:', renderErr);
                 showLoadError(gridEl, 'Error rendering projects. See console for details.');
             }
 
             if (typeof AOS !== 'undefined') {
-                AOS.refresh();
+                setTimeout(() => {
+                    AOS.init();
+                }, 100);
             }
         } catch (error) {
             console.error('API error fetching projects:', error);

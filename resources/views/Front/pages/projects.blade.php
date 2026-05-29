@@ -36,19 +36,19 @@
         </div>
     </section>
 
-    <!-- Project Filter Bar -->
-    <section class="mb-16 px-margin-desktop">
-        <div class="flex flex-wrap gap-4 pb-6 border-b border-outline-variant/30" data-aos="fade-up" data-aos-delay="100">
-            <button class="font-label-sm font-bold text-label-sm text-secondary">ALL PROJECTS</button>
-            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors">FINTECH</button>
-            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors">HEALTHCARE</button>
-            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors">LOGISTICS</button>
-            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors">MANUFACTURING</button>
-        </div>
-    </section>
-
     <!-- Featured Project (loaded via API) -->
     <section id="projects-featured" class="hidden mb-section-gap px-margin-desktop"></section>
+
+        <!-- Project Filter Bar -->
+    <section class="mb-16 px-margin-desktop">
+        <div id="filter-container" class="flex flex-wrap gap-4 pb-6 border-b border-outline-variant/30" data-aos="fade-up" data-aos-delay="100">
+            <button class="font-label-sm font-bold text-label-sm text-secondary" data-filter="all">ALL PROJECTS</button>
+            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" data-filter="fintech">FINTECH</button>
+            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" data-filter="healthcare">HEALTHCARE</button>
+            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" data-filter="logistics">LOGISTICS</button>
+            <button class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" data-filter="manufacturing">MANUFACTURING</button>
+        </div>
+    </section>
 
     <!-- Bento Grid of Projects (loaded via API) -->
     <section class="mb-section-gap px-margin-desktop">
@@ -83,37 +83,5 @@
 </div>
 @endsection
 
-@push('scripts')
-<script>
-    (function(){
-        // Quick debug: fetch /api/projects and log/display the response.
-        if (!window.LaravelApi) {
-            console.error('LaravelApi helper missing');
-            return;
-        }
 
-        window.LaravelApi.get('/projects')
-            .then(function(response){
-                console.log('DEBUG /api/projects response:', response);
-                var grid = document.getElementById('projects-grid');
-                if (grid) {
-                    var pre = document.createElement('pre');
-                    pre.style.whiteSpace = 'pre-wrap';
-                    pre.style.background = 'rgba(255,255,255,0.9)';
-                    pre.style.padding = '12px';
-                    pre.style.border = '1px solid rgba(0,0,0,0.06)';
-                    pre.textContent = JSON.stringify(response, null, 2);
-                    grid.insertAdjacentElement('afterbegin', pre);
-                }
-            })
-            .catch(function(err){
-                console.error('DEBUG /api/projects error:', err);
-                var grid = document.getElementById('projects-grid');
-                if (grid) {
-                    grid.innerHTML = '<p class="col-span-full py-12 text-error text-center">API error: ' + (err?.payload?.message || err.message || err.status || 'unknown') + '</p>';
-                }
-            });
-    })();
-</script>
-@endpush
 
