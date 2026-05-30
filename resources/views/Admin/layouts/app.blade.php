@@ -10,7 +10,30 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <!-- Quill Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet"/>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* Quill Editor overrides to prevent overlapping inputs below */
+        .ql-container.ql-snow {
+            height: auto !important;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            border: 1px solid #e2e8f0 !important;
+            background-color: #eef6e8;
+        }
+        .ql-toolbar.ql-snow {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border: 1px solid #e2e8f0 !important;
+            background-color: #e8f1e2;
+        }
+        .ql-editor {
+            min-height: 200px;
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
         .angled-notch {
             clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
         }
@@ -125,9 +148,9 @@
         <span class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">AI-Solutions</span>
         <div class="hidden md:flex items-center ml-8 space-x-6">
             <a class="{{ request()->routeIs('admin.dashboard') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }} py-1 font-label-sm text-label-sm" href="{{ route('admin.dashboard') }}">Dashboard</a>
-            <a class="{{ request()->routeIs('admin.news.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }} py-1 font-label-sm text-label-sm" href="{{ route('admin.news.index') }}">Blogs</a>
+            <a class="{{ request()->routeIs('admin.blogs.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }} py-1 font-label-sm text-label-sm" href="{{ route('admin.blogs.index') }}">Blogs</a>
             <a class="{{ request()->routeIs('admin.projects.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }} py-1 font-label-sm text-label-sm" href="{{ route('admin.projects.index') }}">Projects</a>
-            <a class="text-on-surface-variant hover:bg-surface-variant/50 transition-colors py-1 font-label-sm text-label-sm" href="#">Analytics</a>
+            <a class="{{ request()->routeIs('admin.gallery.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary transition-colors' }} py-1 font-label-sm text-label-sm" href="{{ route('admin.gallery.index') }}">Gallery</a>
         </div>
     </div>
     
@@ -185,23 +208,27 @@
             <span class="material-symbols-outlined mr-3">dashboard</span>
             <span>Dashboard</span>
         </a>
-        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all text-on-surface-variant hover:bg-surface-variant hover:translate-x-1" href="#">
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.services.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.services.index') }}">
             <span class="material-symbols-outlined mr-3">settings_suggest</span>
             <span>Services</span>
         </a>
-        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.news.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.news.index') }}">
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.blogs.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.blogs.index') }}">
             <span class="material-symbols-outlined mr-3">article</span>
             <span>Blogs</span>
         </a>
-        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all text-on-surface-variant hover:bg-surface-variant hover:translate-x-1" href="#">
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.events.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.events.index') }}">
             <span class="material-symbols-outlined mr-3">event</span>
             <span>Events</span>
+        </a>
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.gallery.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.gallery.index') }}">
+            <span class="material-symbols-outlined mr-3">photo_library</span>
+            <span>Gallery</span>
         </a>
         <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.projects.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.projects.index') }}">
             <span class="material-symbols-outlined mr-3">folder_special</span>
             <span>Projects</span>
         </a>
-        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all text-on-surface-variant hover:bg-surface-variant hover:translate-x-1" href="#">
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.reviews.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.reviews.index') }}">
             <span class="material-symbols-outlined mr-3">rate_review</span>
             <span>Feedbacks</span>
         </a>
@@ -227,30 +254,30 @@
        title="Dashboard">
        dashboard
     </a>
-    <a href="#" 
-       class="material-symbols-outlined p-2 rounded-full transition-all text-on-surface-variant hover:bg-surface-variant/40" 
+    <a href="{{ route('admin.services.index') }}" 
+       class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.services.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
        title="Services">
        settings_suggest
     </a>
-    <a href="{{ route('admin.news.index') }}" 
-       class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.news.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
+    <a href="{{ route('admin.blogs.index') }}" 
+       class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.blogs.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
        title="Blogs">
        article
     </a>
-    <a href="#" 
-       class="material-symbols-outlined p-2 rounded-full transition-all text-on-surface-variant hover:bg-surface-variant/40" 
+    <a href="{{ route('admin.events.index') }}" 
+       class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.events.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
        title="Events">
        event
+    </a>
+    <a href="{{ route('admin.gallery.index') }}" 
+       class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.gallery.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
+       title="Gallery">
+       photo_library
     </a>
     <a href="{{ route('admin.projects.index') }}" 
        class="material-symbols-outlined p-2 rounded-full transition-all {{ request()->routeIs('admin.projects.*') ? 'text-primary bg-secondary-container/50 font-bold' : 'text-on-surface-variant hover:bg-surface-variant/40' }}" 
        title="Projects">
        folder_special
-    </a>
-    <a href="#" 
-       class="material-symbols-outlined p-2 rounded-full transition-all text-on-surface-variant hover:bg-surface-variant/40" 
-       title="Feedbacks">
-       rate_review
     </a>
 </div>
 
@@ -275,6 +302,84 @@
     }
 </script>
 <script src="{{ asset('js/laravel-api.js') }}"></script>
+<!-- Quill Rich Text Editor -->
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+    // Initialize all Quill editors on the page
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.quill-editor-container').forEach(function(container) {
+            var hiddenInput = container.nextElementSibling;
+            var quill = new Quill(container, {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link'],
+                        ['clean']
+                    ]
+                },
+                placeholder: container.dataset.placeholder || 'Write something...'
+            });
+            // Pre-populate with existing content
+            if (hiddenInput && hiddenInput.value) {
+                quill.root.innerHTML = hiddenInput.value;
+            }
+            // Sync content to hidden input on text change
+            quill.on('text-change', function() {
+                hiddenInput.value = quill.root.innerHTML;
+            });
+            // Sync on form submit as well
+            var form = container.closest('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    hiddenInput.value = quill.root.innerHTML;
+                });
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: {!! json_encode(session('success')) !!},
+                confirmButtonColor: '#006e22'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: {!! json_encode(session('error')) !!},
+                confirmButtonColor: '#ba1a1a'
+            });
+        @endif
+
+        @if(session('status'))
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: {!! json_encode(session('status')) !!},
+                confirmButtonColor: '#006e22'
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Failed',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonColor: '#ba1a1a'
+            });
+        @endif
+    });
+</script>
 @stack('scripts')
 @yield('js')
 </body>
