@@ -1,0 +1,207 @@
+/* Universal styling for AI-Solutions Front-End pages */
+
+.angled-notch {
+    clip-path: polygon(
+        0 0, 
+        calc(100% - 40px) 0, 
+        100% 40px, 
+        100% 100%, 
+        40px 100%, 
+        0 calc(100% - 40px)
+    );
+}
+
+.angled-notch-lg {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 32px), calc(100% - 32px) 100%, 0 100%);
+}
+
+.angled-notch-reverse {
+    clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+}
+
+.notched-card {
+    clip-path: polygon(
+        20px 0%, 100% 0%, 
+        100% calc(100% - 20px), calc(100% - 20px) 100%, 
+        0% 100%, 0% 20px
+    );
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+}
+
+.notched-card:hover {
+    border-color: #006e22; /* Secondary Green */
+}
+
+.notch-container {
+    clip-path: polygon(
+        0% 12px, 12px 0%,
+        calc(100% - 12px) 0%, 100% 12px,
+        100% calc(100% - 12px), calc(100% - 12px) 100%,
+        12px 100%, 0% calc(100% - 12px)
+    );
+}
+
+.notch-button {
+    clip-path: polygon(
+        0% 6px, 6px 0%,
+        calc(100% - 6px) 0%, 100% 6px,
+        100% calc(100% - 6px), calc(100% - 6px) 100%,
+        6px 100%, 0% calc(100% - 6px)
+    );
+    transition: all 0.3s ease;
+}
+
+.notch-button:hover {
+    box-shadow: 0 10px 20px -10px rgba(0, 110, 34, 0.4);
+    transform: translateY(-1px);
+}
+
+.hero-bg {
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5HXFne_ftPUs-oUB7a6UT1k6RTLZtu07m9NR09PfcisxsF3UPY4eMxOV1Lc5W6L_oe1jNn8UvtRfHYufJUKCW3IRSztE6Ve_gICv7u1G4zQiAklwlFUHZ_szXq8J8_-cY2sJu9HA8D_QZWsSt8OP8R9zeakQEZDokwSFVxZLkvt8D2_-AdI-MKAw5LtFha_bQ4rkuzm_nkNFkO3gCt7lyQppVCKgv93fA-PkgbW8uT6NV9J89huAeuYAfI7zlCqbJXg6flJhyt9g');
+    background-size: cover;
+    background-position: center;
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+}
+
+/* Lightbox Modal styling */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 80%;
+    width: 800px;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #E2E8F0;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #006e22;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Ambient Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: -3;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(114, 254, 127, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(0, 110, 34, 0.03) 0%, transparent 30%),
+        radial-gradient(circle at 20% 80%, rgba(114, 254, 127, 0.04) 0%, transparent 40%);
+    background-color: #f8f9ff;
+    animation: gradientMove 25s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+/* Unscrollable Canvas Particles background */
+#bg-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Allow particle background to show through solid backgrounds */
+section.bg-surface,
+div.bg-surface,
+section.bg-surface-container-lowest,
+div.bg-surface-container-lowest {
+    background-color: transparent !important;
+}
+
+.bg-surface-container,
+.bg-surface-container-low,
+.bg-surface-container-high {
+    background-color: rgba(235, 238, 247, 0.6) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+@keyframes gradientMove {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-2%, 2%) scale(1.05); }
+    100% { transform: translate(2%, -2%) scale(1); }
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced Hover Effects */
+.hover-glow {
+    transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 10px 30px -10px rgba(0, 110, 34, 0.3);
+    transform: translateY(-2px);
+    border-color: #72fe7f;
+}
+
+/* Custom Cursor Follower */
+#cursor-follower {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(114, 254, 127, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+    display: none;
+}
+
+@media (pointer: fine) {
+    #cursor-follower {
+        display: block;
+    }
+}
+
+.peek-effect {
+    transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1), filter 0.6s ease;
+}
+
+.peek-effect:hover {
+    transform: scale(1.05) rotate(1deg);
+    filter: brightness(1.1);
+}
