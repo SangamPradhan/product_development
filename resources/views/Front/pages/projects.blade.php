@@ -2,26 +2,7 @@
 
 @section('title', 'Projects | AI-Solutions')
 
-@push('styles')
-<style>
-    .notch-container {
-        clip-path: polygon(
-            0% 12px, 12px 0%,
-            calc(100% - 12px) 0%, 100% 12px,
-            100% calc(100% - 12px), calc(100% - 12px) 100%,
-            12px 100%, 0% calc(100% - 12px)
-        );
-    }
-    .notch-button {
-        clip-path: polygon(
-            0% 6px, 6px 0%,
-            calc(100% - 6px) 0%, 100% 6px,
-            100% calc(100% - 6px), calc(100% - 6px) 100%,
-            6px 100%, 0% calc(100% - 6px)
-        );
-    }
-</style>
-@endpush
+
 
 @section('content')
 <div class="relative pt-40">
