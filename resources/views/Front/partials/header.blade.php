@@ -9,5 +9,5 @@
         <a class="text-label-sm font-label-sm {{ request()->routeIs('front.events') || request()->routeIs('front.event.detail') ? 'text-secondary font-bold border-b-2 border-secondary' : 'text-on-surface-variant hover:text-secondary' }} transition-colors" href="{{ route('front.events') }}">Events</a>
         <a class="text-label-sm font-label-sm {{ request()->routeIs('front.contact') ? 'text-secondary font-bold border-b-2 border-secondary' : 'text-on-surface-variant hover:text-secondary' }} transition-colors" href="{{ route('front.contact') }}">Contact</a>
     </div>
-    <a href="{{ route('front.contact') }}" class="bg-secondary text-white px-6 py-2 rounded-full font-label-sm text-label-sm hover:scale-95 transition-all">Get Started</a>
+    <a href="{{ route('front.contact') }}" class="notch-button bg-secondary text-white px-6 py-2.5 font-label-sm text-label-sm hover:bg-on-secondary-fixed-variant transition-all hover-glow inline-block">Get Started</a>
 </nav>
