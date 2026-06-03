@@ -20,6 +20,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -110,139 +112,7 @@
         },
       }
     </script>
-    <style>
-        .angled-notch {
-            clip-path: polygon(
-                0 0, 
-                calc(100% - 40px) 0, 
-                100% 40px, 
-                100% 100%, 
-                40px 100%, 
-                0 calc(100% - 40px)
-            );
-        }
-        .notched-card {
-            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
-        }
-        .hero-bg {
-            background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5HXFne_ftPUs-oUB7a6UT1k6RTLZtu07m9NR09PfcisxsF3UPY4eMxOV1Lc5W6L_oe1jNn8UvtRfHYufJUKCW3IRSztE6Ve_gICv7u1G4zQiAklwlFUHZ_szXq8J8_-cY2sJu9HA8D_QZWsSt8OP8R9zeakQEZDokwSFVxZLkvt8D2_-AdI-MKAw5LtFha_bQ4rkuzm_nkNFkO3gCt7lyQppVCKgv93fA-PkgbW8uT6NV9J89huAeuYAfI7zlCqbJXg6flJhyt9g');
-            background-size: cover;
-            background-position: center;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #E2E8F0;
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #006e22;
-        }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
-        }
-
-        /* Ambient Animated Background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            z-index: -3;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(114, 254, 127, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(0, 110, 34, 0.03) 0%, transparent 30%),
-                radial-gradient(circle at 20% 80%, rgba(114, 254, 127, 0.04) 0%, transparent 40%);
-            background-color: #f8f9ff;
-            animation: gradientMove 25s ease-in-out infinite alternate;
-            pointer-events: none;
-        }
-
-        /* Unscrollable Canvas Particles background */
-        #bg-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        /* Allow particle background to show through solid section backgrounds in the white spaces */
-        section.bg-surface,
-        div.bg-surface,
-        section.bg-surface-container-lowest,
-        div.bg-surface-container-lowest {
-            background-color: transparent !important;
-        }
-        
-        .bg-surface-container,
-        .bg-surface-container-low,
-        .bg-surface-container-high {
-            background-color: rgba(235, 238, 247, 0.6) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        @keyframes gradientMove {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-2%, 2%) scale(1.05); }
-            100% { transform: translate(2%, -2%) scale(1); }
-        }
-
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Enhanced Hover Effects */
-        .hover-glow {
-            transition: all 0.3s ease;
-        }
-        .hover-glow:hover {
-            box-shadow: 0 10px 30px -10px rgba(0, 110, 34, 0.3);
-            transform: translateY(-2px);
-            border-color: #72fe7f;
-        }
-
-        /* Custom Cursor Follower */
-        #cursor-follower {
-            position: fixed;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(114, 254, 127, 0.05) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-            display: none;
-        }
-        @media (pointer: fine) {
-            #cursor-follower {
-                display: block;
-            }
-        }
-        .peek-effect {
-            transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1), filter 0.6s ease;
-        }
-        .peek-effect:hover {
-            transform: scale(1.05) rotate(1deg);
-            filter: brightness(1.1);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/front-custom.css') }}"/>
     @stack('styles')
 </head>
 <body class="text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen overflow-x-hidden">
@@ -258,6 +128,8 @@
     <div data-aos="fade-up">
         @include('front.partials.footer')
     </div>
+
+    @include('front.partials.chatbot')
 
     <!-- Load laravel-api.js FIRST (before other scripts that depend on it) -->
     <script src="{{ asset('js/laravel-api.js') }}"></script>
@@ -305,5 +177,47 @@
             }
         });
     </script>
+<script>
+    /* ─── SweetAlert Session Notifications (Front-end) ─── */
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: {!! json_encode(session('success')) !!},
+                confirmButtonColor: '#006e22',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: {!! json_encode(session('error')) !!},
+                confirmButtonColor: '#ba1a1a'
+            });
+        @endif
+
+        @if(session('status'))
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: {!! json_encode(session('status')) !!},
+                confirmButtonColor: '#006e22'
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Failed',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonColor: '#ba1a1a'
+            });
+        @endif
+    });
+</script>
 </body>
 </html>
