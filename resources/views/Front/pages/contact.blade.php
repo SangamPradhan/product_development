@@ -28,7 +28,7 @@
         <!-- Contact Form Card -->
         <div class="md:col-span-8 bg-surface-container-low border border-outline-variant p-10 angled-notch hover-glow transition-all" data-aos="fade-right">
             <h2 class="text-headline-md font-headline-md mb-8">Send us a message</h2>
-            <form action="#" method="POST" class="space-y-6">
+            <form action="{{ route('front.contact.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -57,7 +57,7 @@
                     <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Message</label>
                     <textarea name="message" rows="5" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md resize-none" placeholder="How can we help you?" required></textarea>
                 </div>
-                <button type="submit" class="bg-secondary text-on-secondary px-8 py-4 rounded-none font-label-sm text-label-sm uppercase tracking-widest active:scale-[0.98] transition-all inline-flex items-center gap-2 hover:bg-secondary/90 hover-glow">
+                <button type="submit" class="notch-button bg-secondary text-white px-8 py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-on-secondary-fixed-variant transition-all hover-glow inline-flex items-center gap-2">
                     Submit Inquiry <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                 </button>
             </form>
