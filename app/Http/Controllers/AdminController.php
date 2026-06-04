@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\EventBooking;
+use App\Models\ContactMessage;
 
 class AdminController extends Controller
 {
@@ -156,5 +158,51 @@ class AdminController extends Controller
     public function newsDelete($id)
     {
         return redirect()->route('admin.news.index')->with('success', 'Blog deleted successfully (Mock Database Removal)!');
+    }
+
+    /**
+     * Display a listing of all event bookings.
+     */
+    public function bookingsIndex()
+    {
+        $bookings = EventBooking::with('event')->latest()->get();
+
+        return view('Admin.bookings.index', [
+            'title' => 'Event Bookings',
+            'bookings' => $bookings,
+        ]);
+    }
+
+    /**
+     * Delete an event booking.
+     */
+    public function bookingDelete(EventBooking $booking)
+    {
+        $booking->delete();
+
+        return redirect()->route('admin.bookings.index')->with('success', 'Event booking record deleted successfully.');
+    }
+
+    /**
+     * Display a listing of all contact inquiries.
+     */
+    public function contactsIndex()
+    {
+        $contacts = ContactMessage::latest()->get();
+
+        return view('Admin.contacts.index', [
+            'title' => 'Contact Inquiries',
+            'contacts' => $contacts,
+        ]);
+    }
+
+    /**
+     * Delete a contact inquiry message.
+     */
+    public function contactDelete(ContactMessage $contact)
+    {
+        $contact->delete();
+
+        return redirect()->route('admin.contacts.index')->with('success', 'Contact inquiry record deleted successfully.');
     }
 }
