@@ -21,11 +21,15 @@
         <p class="text-on-surface-variant font-label-sm uppercase tracking-wider">System Intelligence &amp; Active Deployments</p>
     </div>
     
-    @if(Route::has($route . 'create'))
-        <a href="{{ route($route . 'create') }}" class="bg-primary text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary/95 transition-all active:scale-95 shadow-sm font-label-sm text-sm uppercase tracking-wider">
-            <span class="material-symbols-outlined">add</span>
-            <span>Add New {{ Str::singular($title) }}</span>
-        </a>
+    @hasSection('header_actions')
+        @yield('header_actions')
+    @else
+        @if(Route::has($route . 'create'))
+            <a href="{{ route($route . 'create') }}" class="bg-primary text-on-primary px-6 py-3 rounded-lg flex items-center gap-2 hover:bg-primary/95 transition-all active:scale-95 shadow-sm font-label-sm text-sm uppercase tracking-wider">
+                <span class="material-symbols-outlined">add</span>
+                <span>Add New {{ Str::singular($title) }}</span>
+            </a>
+        @endif
     @endif
 </div>
 

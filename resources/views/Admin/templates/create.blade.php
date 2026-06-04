@@ -9,7 +9,7 @@
     <p class="text-on-surface-variant font-label-sm uppercase tracking-wider">Initialize system data & deploy assets</p>
 </div>
 
-<div class="max-w-4xl">
+<div class="w-full max-w-[90rem]">
     <!-- Validation Errors -->
     @if ($errors->any())
         <div class="mb-8 p-4 rounded-xl bg-error-container text-on-error-container border border-error/20 font-label-sm text-sm" role="alert">
