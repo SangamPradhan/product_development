@@ -3,6 +3,11 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\GalleryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontController::class, 'home'])->name('front.home');
@@ -11,11 +16,14 @@ Route::get('/services', [FrontController::class, 'services'])->name('front.servi
 Route::get('/projects', [FrontController::class, 'projects'])->name('front.projects');
 Route::get('/projects/{slug}', [FrontController::class, 'projectDetail'])->name('front.project.detail');
 Route::get('/events', [FrontController::class, 'events'])->name('front.events');
-Route::get('/events/detail', [FrontController::class, 'eventDetail'])->name('front.event.detail');
+Route::get('/events/{slug}', [FrontController::class, 'eventDetail'])->name('front.event.detail');
 Route::get('/gallery', [FrontController::class, 'gallery'])->name('front.gallery');
+Route::get('/gallery/section', [FrontController::class, 'gallerySection'])->name('front.gallery.section');
 Route::get('/blogs', [FrontController::class, 'blogs'])->name('front.blogs');
-Route::get('/blogs/detail', [FrontController::class, 'blogDetail'])->name('front.blog.detail');
+Route::get('/blogs/{slug}', [FrontController::class, 'blogDetail'])->name('front.blog.detail');
 Route::get('/contact', [FrontController::class, 'contact'])->name('front.contact');
+Route::post('/contact', [FrontController::class, 'contactStore'])->name('front.contact.store');
+Route::post('/events/{id}/book', [FrontController::class, 'bookEvent'])->name('front.event.book');
 
 // Admin Dashboard & Auth Routes
 Route::prefix('admin')->group(function () {
@@ -41,5 +49,32 @@ Route::prefix('admin')->group(function () {
         // Projects admin UI (data via REST API)
         Route::resource('projects', ProjectController::class, ['as' => 'admin'])
             ->only(['index', 'create', 'edit']);
+
+        // Reviews admin UI (server-side Blade)
+        Route::get('/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
+        Route::get('/reviews/{review}', [ReviewController::class, 'show'])->name('admin.reviews.show');
+        Route::post('/reviews/{review}/accept', [ReviewController::class, 'accept'])->name('admin.reviews.accept');
+        Route::post('/reviews/{review}/reject', [ReviewController::class, 'reject'])->name('admin.reviews.reject');
+        Route::delete('/reviews/{review}/delete', [ReviewController::class, 'delete'])->name('admin.reviews.delete');
+
+        // Event Bookings dashboard
+        Route::get('/bookings', [AdminController::class, 'bookingsIndex'])->name('admin.bookings.index');
+        Route::delete('/bookings/{booking}/delete', [AdminController::class, 'bookingDelete'])->name('admin.bookings.delete');
+
+        // Contact / Inquiries dashboard
+        Route::get('/contacts', [AdminController::class, 'contactsIndex'])->name('admin.contacts.index');
+        Route::delete('/contacts/{contact}/delete', [AdminController::class, 'contactDelete'])->name('admin.contacts.delete');
+
+        // Services CRUD
+        Route::resource('services', ServiceController::class, ['as' => 'admin']);
+
+        // Events CRUD
+        Route::resource('events', EventController::class, ['as' => 'admin']);
+
+        // Blogs CRUD
+        Route::resource('blogs', BlogController::class, ['as' => 'admin']);
+
+        // Gallery CRUD
+        Route::resource('gallery', GalleryController::class, ['as' => 'admin']);
     });
 });
