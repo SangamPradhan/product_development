@@ -15,101 +15,190 @@
     </div>
 </header>
 
-<!-- Bento Grid Gallery -->
 <main class="px-margin-desktop pb-section-gap">
     <div class="grid grid-cols-12 gap-gutter">
-        <!-- Feature 1: The Office Architecture -->
-        <div class="col-span-12 md:col-span-8 group hover-glow transition-all" data-aos="fade-right">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[500px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9i4qtJDEaA4red51AV_fPUzK89ZUsWIbDnLaXR0mVlk-bYcephcUhZ_AXu3ZR3uR308Cj2wNk2asO1uGv7onMMeZO8CQlm4GWgbNLuJKvT9HUbYTgNJHxLjch4BfZnlv8ykW8PaXb4hoxudrhn5i9XTeQdJ2ogPc3fh3bWo-DmL8d_7tdxLxnY9tNaH39g2z8sDK_nrsx5VLX8Ez20dW4E0tajikckE1klLkjbG7ak3e87sNPIXBJF4N7QRk6I7wHMjaFKXnJeWA" alt="Office Architecture"/>
-                <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/60 to-transparent">
-                    <span class="font-label-sm text-label-sm text-white/80 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 mb-4 inline-block">The Hub</span>
-                    <h3 class="font-headline-lg text-headline-lg text-white">Technological Sanctuary</h3>
+
+        {{-- ── FEATURED ROW: Video (8 cols left) + Image (4 cols right) ── --}}
+        @if($featuredVideo)
+            <div class="col-span-12 md:col-span-8 group hover-glow transition-all cursor-pointer" data-aos="fade-up"
+                 onclick="openLightbox('{{ $featuredVideo->source === 'youtube' ? $featuredVideo->embed_url : $featuredVideo->file_url }}', '{{ $featuredVideo->source }}', 'video')">
+                <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[500px] relative">
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}"/>
+                    <div class="absolute inset-0 bg-black/35 flex items-center justify-center transition-all group-hover:bg-black/20">
+                        <div class="w-20 h-20 rounded-full bg-secondary text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                        <span class="font-label-sm text-label-sm text-white/80 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 mb-4 inline-block">FEATURED VIDEO</span>
+                        <h3 class="font-headline-lg text-headline-lg text-white font-bold">{{ $featuredVideo->title }}</h3>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
-        <!-- Feature 2: Collaborative Culture -->
-        <div class="col-span-12 md:col-span-4 group hover-glow transition-all" data-aos="fade-left" data-aos-delay="100">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[500px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlytP3j7lMuiyHnwIt8KHMTNVSyN3h8f9xS_rd-SO_HkyrMAVPqR_bWgrJ-NXyZuo0w4RIqpPsXYk3-EBO1qiEzQRlTm2fU2dxP2-wFOd2CtfVucWG3Ae7HLVfdK8Cqftj0LFRjieel6Owk9452J9vzm81a25gy1cQ8pRE6yTWSJMBsDOofZEsS4JXWqhRqzfDCZKtBCrDei2V3Urc5yT4xOJBejY75NrKDpSkpHAeEpZcXoJCyddqxEYNHF3W4ydfR0hhNJ1GXp4" alt="Collaborative Culture"/>
-                <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/60 to-transparent">
-                    <h3 class="font-headline-md text-headline-md text-white">Culture of Clarity</h3>
+        @if($featuredImage)
+            <div class="col-span-12 md:col-span-4 group hover-glow transition-all cursor-pointer" data-aos="fade-up" data-aos-delay="100"
+                 onclick="openLightbox('{{ $featuredImage->file_url }}', 'upload', 'image')">
+                <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[500px] relative">
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                         src="{{ $featuredImage->file_url }}" alt="{{ $featuredImage->title }}"/>
+                    <div class="absolute inset-0 bg-black/20 flex items-center justify-center transition-all group-hover:bg-black/10">
+                        <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                            <span class="material-symbols-outlined text-3xl">zoom_in</span>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                        <span class="font-label-sm text-label-sm text-white/80 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 mb-4 inline-block">FEATURED PHOTO</span>
+                        <h3 class="font-headline-md text-headline-md text-white font-bold">{{ $featuredImage->title }}</h3>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
-        <!-- Filter / Category Chips -->
+        {{-- ── CATEGORY FILTER CHIPS ── --}}
         <div class="col-span-12 flex gap-4 py-8 overflow-x-auto" data-aos="fade-up">
-            <button class="bg-secondary text-on-secondary px-6 py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap">All Moments</button>
-            <button class="bg-surface-container-low border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-label-sm text-label-sm hover:border-secondary transition-all whitespace-nowrap">Office Space</button>
-            <button class="bg-surface-container-low border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-label-sm text-label-sm hover:border-secondary transition-all whitespace-nowrap">Team Synergy</button>
-            <button class="bg-surface-container-low border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-label-sm text-label-sm hover:border-secondary transition-all whitespace-nowrap">Global Events</button>
-            <button class="bg-surface-container-low border border-outline-variant text-on-surface-variant px-6 py-2 rounded-full font-label-sm text-label-sm hover:border-secondary transition-all whitespace-nowrap">Innovation Labs</button>
+            <a href="{{ route('front.gallery') }}"
+               class="px-6 py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap {{ empty($category) ? 'bg-secondary text-white' : 'bg-surface-container-low border border-outline-variant text-on-surface-variant hover:border-secondary transition-all' }}">
+                All Moments
+            </a>
+            @foreach($categories as $cat)
+                <a href="{{ route('front.gallery', ['category' => $cat]) }}"
+                   class="px-6 py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap uppercase {{ $category === $cat ? 'bg-secondary text-white' : 'bg-surface-container-low border border-outline-variant text-on-surface-variant hover:border-secondary transition-all' }}">
+                    {{ $cat }}
+                </a>
+            @endforeach
         </div>
 
-        <!-- Secondary Grid -->
-        <div class="col-span-12 md:col-span-4 group hover-glow transition-all" data-aos="zoom-in" data-aos-delay="100">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[350px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2O8I-wkxuBoX1kiiBnmV6jHKyjKU30ixRyJtSLbgtxRJ6XlTbPYeNmX5My9pasDb4l2eloJUWzFdr8O-K-XOoh4Iqelh_PKwyLgKuLfqY25UWpJE1O-kyh_jy79c50huT4c5e4nBIdmih4uT9N0AwKWVcY8aTyepjmo1e5m-XZdh88W0WEbPHOxoJRpMN_xpuI6XqMmgknFNR17XU2zT_UVs1Dg52PLahv-WKyrWp-WG6v4LY0aBq9rboa7-Z7EeMaY68P4fZWfk" alt="Engineering Lab"/>
-                <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/10 transition-all duration-300"></div>
+        {{-- ── VIDEOS SECTION ── --}}
+        <div class="col-span-12" data-aos="fade-up">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="material-symbols-outlined text-secondary text-[28px]">play_circle</span>
+                <h2 class="font-headline-lg text-headline-lg text-on-surface">Videos</h2>
+                <div class="flex-1 h-px bg-outline-variant/50 ml-4"></div>
             </div>
-            <p class="font-label-sm text-label-sm text-secondary mt-4">ENGINEERING LAB</p>
-            <h4 class="font-headline-md text-headline-md text-on-surface">System Architecture</h4>
-        </div>
-        <div class="col-span-12 md:col-span-4 group hover-glow transition-all" data-aos="zoom-in" data-aos-delay="200">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[350px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdI0SjCs43BSos8jwRTl_KftrocFdXPNshQomENExykoZUzvH2BFiANqhJBQBOZufmXwm5X6PYy7U49qF6UXRLAEA-KcGaimw79z-4o67ptEi1VXTRSVq5rrBoueu3N6HAMvheuGspXXDvAd84GtbLl5S7G-EPKdgW46bEhd5TarS_Q4N7qd6jRBhbOfZIs7IRv27LLDgUg8EmRycEzQ8uLavDSIbYIDitkp_MZEXtbmw06JisGUoirf-5Ti9-co6Gej9YQfLeixg" alt="Global Summit"/>
-                <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/10 transition-all duration-300"></div>
+
+            <div id="videos-grid" class="grid grid-cols-12 gap-gutter">
+                @forelse($videos as $item)
+                    <div class="col-span-12 md:col-span-4 group hover-glow transition-all cursor-pointer"
+                         onclick="openLightbox('{{ $item->source === 'youtube' ? $item->embed_url : $item->file_url }}', '{{ $item->source }}', 'video')">
+                        <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[280px] relative">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                 src="{{ $item->thumbnail_url }}" alt="{{ $item->title }}"/>
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center transition-all group-hover:bg-black/15">
+                                <div class="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center shadow group-hover:scale-110 transition-transform duration-300">
+                                    <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="font-label-sm text-label-sm text-secondary mt-4 uppercase font-bold">{{ $item->category }}</p>
+                        <h4 class="font-headline-md text-headline-md text-on-surface font-bold">{{ $item->title }}</h4>
+                    </div>
+                @empty
+                    <div class="col-span-12 p-12 text-center text-on-surface-variant font-label-sm uppercase bg-surface-container-low border border-outline border-dashed rounded-xl">
+                        No videos found.
+                    </div>
+                @endforelse
             </div>
-            <p class="font-label-sm text-label-sm text-secondary mt-4">GLOBAL SUMMIT 2024</p>
-            <h4 class="font-headline-md text-headline-md text-on-surface">Connecting Intelligence</h4>
-        </div>
-        <div class="col-span-12 md:col-span-4 group hover-glow transition-all" data-aos="zoom-in" data-aos-delay="300">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[350px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-BXTQpmXvddwgjMAwI2eMgCkwnDxDpGGrEUV2NhYp3jhkuNOLB1OLFglNrJ5Rm9auJclRHg2zXtZUwWbrSU9y_-ZnteQrj9NEV99Rfn_Cc6PUcetFoaL-lBcy4AgttI_SyaggKASw1INkbniSxhvvSLUCQzE0zrfoLmVwFk1VIq9guCLnpFgZwpr4JVse6nA_-xQd_mCjF1y5K7G-ojgRKk6QtxLr4s8zPg505lDZ2vzub4wOnM0uBCJW0N8ZYr6O1aMvTf4NcjE" alt="Strategy Session"/>
-                <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/10 transition-all duration-300"></div>
+
+            <div id="videos-pagination" class="mt-10 flex items-center justify-center gap-2 font-label-sm">
+                @include('Front.partials.pagination', ['items' => $videos, 'section' => 'videos'])
             </div>
-            <p class="font-label-sm text-label-sm text-secondary mt-4">STRATEGY SESSION</p>
-            <h4 class="font-headline-md text-headline-md text-on-surface">Geometric Logic</h4>
         </div>
 
-        <!-- Full Width Quote / Stat -->
-        <div class="col-span-12 py-16 text-center border-y border-outline-variant/30 my-8" data-aos="fade-up">
-            <span class="material-symbols-outlined text-secondary text-[48px] mb-6">format_quote</span>
-            <h2 class="font-headline-lg text-headline-lg text-on-surface max-w-3xl mx-auto italic">"Innovation is not just about the code we write, but the space we create for collective brilliance to flourish."</h2>
-            <p class="font-label-sm text-label-sm text-on-surface-variant mt-6 tracking-widest">— FOUNDING ARCHITECT</p>
+        {{-- ── DIVIDER ── --}}
+        <div class="col-span-12 border-t border-outline-variant/30 my-4"></div>
+
+        {{-- ── IMAGES SECTION ── --}}
+        <div class="col-span-12" data-aos="fade-up">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="material-symbols-outlined text-secondary text-[28px]">photo_library</span>
+                <h2 class="font-headline-lg text-headline-lg text-on-surface">Photos</h2>
+                <div class="flex-1 h-px bg-outline-variant/50 ml-4"></div>
+            </div>
+
+            <div id="images-grid" class="grid grid-cols-12 gap-gutter">
+                @forelse($images as $item)
+                    <div class="col-span-12 md:col-span-4 group hover-glow transition-all cursor-pointer"
+                         onclick="openLightbox('{{ $item->file_url }}', 'upload', 'image')">
+                        <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[300px] relative">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                 src="{{ $item->file_url }}" alt="{{ $item->title }}"/>
+                            <div class="absolute inset-0 bg-secondary/0 group-hover:bg-secondary/10 flex items-center justify-center transition-all duration-300">
+                                <div class="w-12 h-12 rounded-full bg-white text-secondary opacity-0 group-hover:opacity-100 flex items-center justify-center shadow transition-opacity duration-300">
+                                    <span class="material-symbols-outlined text-2xl">zoom_in</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="font-label-sm text-label-sm text-secondary mt-4 uppercase font-bold">{{ $item->category }}</p>
+                        <h4 class="font-headline-md text-headline-md text-on-surface font-bold">{{ $item->title }}</h4>
+                    </div>
+                @empty
+                    <div class="col-span-12 p-12 text-center text-on-surface-variant font-label-sm uppercase bg-surface-container-low border border-outline border-dashed rounded-xl">
+                        No photos found.
+                    </div>
+                @endforelse
+            </div>
+
+            <div id="images-pagination" class="mt-10 flex items-center justify-center gap-2 font-label-sm">
+                @include('Front.partials.pagination', ['items' => $images, 'section' => 'images'])
+            </div>
         </div>
 
-        <!-- Gallery Grid Continued -->
-        <div class="col-span-12 md:col-span-6 group hover-glow transition-all" data-aos="fade-right">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[450px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZ4Us3UreK4Y1b2UF-Qqb2GLjOmvymH87MAZQm4nBpfJbWSRYRylJD6OZqSSYavpx9JstMSpTVC3FhARiyA8Xz6o5o8VzykAMsfJ2tR5FfL9hR63wolKTI_NKlAdtWDWKlpKkxVwRXeat3saQL8qj5MdtwcvWx_TCign8b4cYVe7SDPxvnt58uUJkTFD6_NGqCkmcwjtEJthSAbSIUITK_WnxjHBaGtKcsngNK6RJ4WVKwSgTdgvJtAQyEWLwVOyU-L8eznA8T7pE" alt="Visualizing Futures"/>
-                <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/60 to-transparent">
-                    <h3 class="font-headline-md text-headline-md text-white">Visualizing Futures</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-span-12 md:col-span-6 group hover-glow transition-all" data-aos="fade-left">
-            <div class="notched-card bg-surface-container-low border border-outline-variant overflow-hidden h-[450px] relative">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 peek-effect" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI_IbMkyFaNIirTu8CGnkabUNQm7Qg7bQij51xfO5MKjnSyUBQMdY2VBt_8-lCi13RDcpInc9f_Dae6TWaPMAEsNCw-jQVFAzrLbXirYj7OZXhp3pGdEayLtwZiZOR8Jr7lAgb4paaW51L_7kFa9xr33c-ILT3sOhdE0Ov6USvYhrwaCZ8r0uyBXrKjXE-GlSzFIby_jBhbzg84tSrJufLoVaxQQKfYGUnOUczrfLR4ESIERPgcsG8aQZlIkfNfoGPjCkryLWfqgY" alt="Team Milestone"/>
-                <div class="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/60 to-transparent">
-                    <h3 class="font-headline-md text-headline-md text-white">The Human Element</h3>
-                </div>
-            </div>
-        </div>
     </div>
 </main>
 
-<!-- CTA Section -->
-<section class="px-margin-desktop pb-section-gap" data-aos="zoom-in">
-    <div class="notched-card bg-surface-container border border-outline-variant p-16 text-center hover-glow transition-all">
-        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Experience the Culture Firsthand</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant mb-10 max-w-xl mx-auto">We are always looking for visionary minds to join our architectural journey in building the next generation of automation.</p>
-        <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <button class="bg-secondary text-on-secondary px-10 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:bg-on-secondary-container transition-all hover-glow">View Openings</button>
-            <button class="bg-transparent border border-secondary text-secondary px-10 py-4 rounded-full font-label-sm text-label-sm uppercase tracking-widest hover:bg-secondary/5 transition-all hover-glow">Download Press Kit</button>
-        </div>
+{{-- ── LIGHTBOX ── --}}
+<div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+    <button class="absolute top-6 right-6 text-white text-4xl hover:scale-110 transition-transform">&times;</button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+        <div id="lightbox-container" class="aspect-video w-full flex items-center justify-center"></div>
     </div>
-</section>
+</div>
+
+<script>
+function openLightbox(source, provider, type) {
+    const container = document.getElementById('lightbox-container');
+    container.innerHTML = '';
+
+    if (type === 'video') {
+        if (provider === 'youtube') {
+            let id = '';
+            if (source.includes('youtu.be/')) id = source.split('youtu.be/')[1].split(/[?#]/)[0];
+            else if (source.includes('embed/')) id = source.split('embed/')[1].split(/[?#]/)[0];
+            else if (source.includes('v=')) id = source.split('v=')[1].split('&')[0];
+            else { try { const p = source.split('/'); id = p[p.length-1].split(/[?#]/)[0]; } catch(e){} }
+            container.innerHTML = id
+                ? `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                : `<p class="text-white text-center">Invalid YouTube URL</p>`;
+        } else {
+            container.innerHTML = `<video class="w-full h-full max-h-[80vh] rounded-lg" src="${source}" controls autoplay></video>`;
+        }
+    } else {
+        container.innerHTML = `<img class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl" src="${source}" />`;
+    }
+
+    document.getElementById('lightbox').style.display = 'flex';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox-container').innerHTML = '';
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+async function loadSection(section, page) {
+    const params = new URLSearchParams({ section, page });
+    const cat = '{{ $category ?? '' }}';
+    if (cat) params.set('category', cat);
+
+    const res = await fetch(`{{ route('front.gallery.section') }}?${params}`);
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    document.getElementById(`${section}-grid`).innerHTML = doc.getElementById(`${section}-grid`).innerHTML;
+    document.getElementById(`${section}-pagination`).innerHTML = doc.getElementById(`${section}-pagination`).innerHTML;
+    document.getElementById(`${section}-grid`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
 @endsection
