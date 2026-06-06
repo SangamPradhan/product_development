@@ -22,11 +22,11 @@
                 details with ease for better decision-making.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16" data-aos="fade-up" data-aos-delay="100">
-                <button
-                    class="bg-secondary text-white px-10 py-4 rounded-full font-headline-md text-headline-md flex items-center gap-3 hover:scale-98 transition-all hover-glow">
+                <a href="{{ route('front.contact') }}"
+                    class="notch-button bg-secondary text-white px-10 py-4 font-headline-md text-headline-md flex items-center gap-3 hover:scale-98 transition-all hover-glow inline-flex">
                     Book a Demo
                     <span class="material-symbols-outlined">arrow_forward</span>
-                </button>
+                </a>
             </div>
             <div
                 class="flex gap-2 p-1.5 bg-surface-container/50 backdrop-blur-md rounded-full border border-outline-variant/20 inline-flex mb-12">
@@ -81,48 +81,46 @@
                         </div>
                         <div class="space-y-2">
                             <div class="font-display-lg text-[48px] text-secondary">150+</div>
-                            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Enterprise Clients</p>
+                            <p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Integrations</p>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Cards with Angled Notch Shape -->
-                    <div
-                        class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 md:col-span-3 lg:col-span-1 hover-glow cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-                        <span class="material-symbols-outlined text-secondary text-[40px]">security</span>
-                        <h3 class="font-headline-md text-headline-md">Personal Information Removal</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Lets users quickly find answers to
-                            their questions without searching through multiple sources.</p>
-                        <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group" href="#">
-                            Explore More
-                            <span
-                                class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
-                        </a>
-                    </div>
-                    <div
-                        class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 md:col-span-1 hover-glow cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-                        <span class="material-symbols-outlined text-secondary text-[40px]">shield_person</span>
-                        <h3 class="font-headline-md text-headline-md">Cloaking Alias Profiles</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant">Generate unlimited virtual identities
-                            for total online privacy.</p>
-                        <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group" href="#">
-                            Explore More
-                            <span
-                                class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
-                        </a>
-                    </div>
-                    <div
-                        class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 md:col-span-1 hover-glow cursor-pointer" data-aos="fade-up" data-aos-delay="300">
-                        <span class="material-symbols-outlined text-secondary text-[40px]">verified_user</span>
-                        <h3 class="font-headline-md text-headline-md">Virtual Identities Security</h3>
-                        <p class="font-body-md text-body-md text-on-surface-variant">The next-level in privacy protection
-                            for online and travel.</p>
-                        <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group" href="#">
-                            Explore More
-                            <span
-                                class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
-                        </a>
-                    </div>
+                @php
+                    $displayServices = count($services) > 0 ? $services : [
+                        (object)[
+                            'title' => 'Personal Information Removal',
+                            'description' => 'Lets users quickly find answers to their questions without searching through multiple sources.',
+                            'icon' => 'security',
+                            'slug' => '#'
+                        ],
+                        (object)[
+                            'title' => 'Cloaking Alias Profiles',
+                            'description' => 'Generate unlimited virtual identities for total online privacy.',
+                            'icon' => 'shield_person',
+                            'slug' => '#'
+                        ],
+                        (object)[
+                            'title' => 'Virtual Identities Security',
+                            'description' => 'The next-level in privacy protection for online and travel.',
+                            'icon' => 'verified_user',
+                            'slug' => '#'
+                        ]
+                    ];
+                @endphp
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:w-[150%] xl:w-[170%]">
+                    @foreach($displayServices as $idx => $ser)
+                        <div class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 md:col-span-1 hover-glow cursor-pointer flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($idx + 1) * 100 }}">
+                            <div>
+                                <span class="material-symbols-outlined text-secondary text-[40px]">{{ $ser->icon }}</span>
+                                <h3 class="font-headline-md text-headline-md mt-4">{{ $ser->title }}</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mt-2">{{ $ser->description }}</p>
+                            </div>
+                            <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group mt-6" href="{{ route('front.services') }}">
+                                Explore More
+                                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -263,38 +261,55 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div id="home-featured-project" class="md:col-span-2 md:row-span-2"></div>
                 <!-- Event 1 -->
-                <div
-                    class="md:col-span-2 bg-secondary-container p-8 rounded-xl border border-outline-variant/30 flex flex-col justify-between hover-glow" data-aos="fade-left" data-aos-delay="100">
+                @php
+                    $eventTitle = $featuredEvent ? $featuredEvent->title : 'AI-Solutions Summit';
+                    $eventDate = $featuredEvent ? $featuredEvent->event_date->format('M d, Y') : 'Oct 24, 2024';
+                    $eventDesc = $featuredEvent ? Str::limit($featuredEvent->description, 100) : 'Join us for the largest gathering of automation engineers in San Francisco.';
+                    $eventLink = $featuredEvent ? route('front.event.detail', $featuredEvent->slug) : '#';
+                @endphp
+                <div class="md:col-span-2 bg-secondary-container p-8 rounded-xl border border-outline-variant/30 flex flex-col justify-between hover-glow" data-aos="fade-left" data-aos-delay="100">
                     <div>
                         <div class="flex justify-between items-start mb-6">
-                            <span
-                                class="bg-on-secondary-container text-white px-3 py-1 rounded-full text-label-sm font-label-sm uppercase">Next
-                                Event</span>
-                            <span class="text-label-sm font-label-sm text-on-secondary-container">Oct 24, 2024</span>
+                            <span class="bg-on-secondary-container text-white px-3 py-1 rounded-full text-label-sm font-label-sm uppercase font-bold">Next Event</span>
+                            <span class="text-label-sm font-label-sm text-on-secondary-container font-bold">{{ $eventDate }}</span>
                         </div>
-                        <h3 class="font-headline-md text-headline-md text-on-secondary-container">AI-Solutions Summit</h3>
-                        <p class="font-body-md text-body-md text-on-secondary-container/80 mt-2">Join us for the largest
-                            gathering of automation engineers in San Francisco.</p>
+                        <h3 class="font-headline-md text-headline-md text-on-secondary-container">{{ $eventTitle }}</h3>
+                        <p class="font-body-md text-body-md text-on-secondary-container/80 mt-2">{{ $eventDesc }}</p>
                     </div>
-                    <button
-                        class="mt-8 border border-on-secondary-container text-on-secondary-container px-6 py-2 rounded-full font-label-sm text-label-sm hover:bg-on-secondary-container hover:text-white transition-colors">Register
-                        Now</button>
+                    <a href="{{ $eventLink }}" class="notch-button mt-8 text-center border border-on-secondary-container text-on-secondary-container px-6 py-2.5 font-label-sm text-label-sm hover:bg-on-secondary-container hover:text-white transition-colors inline-block">
+                        View Event Details
+                    </a>
                 </div>
-                <!-- Blog 1 -->
-                <div
-                    class="md:col-span-1 bg-surface-container-high p-6 rounded-xl border border-outline-variant/30 space-y-4 hover-glow cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-                    <span class="text-label-sm font-label-sm text-secondary">Insights</span>
-                    <h4 class="font-headline-md text-[20px]">The Future of Prompt Engineering</h4>
-                    <p class="text-body-md text-on-surface-variant">Why LLMs are just the beginning of agentic workflows.
-                    </p>
-                </div>
-                <!-- Blog 2 -->
-                <div
-                    class="md:col-span-1 bg-surface-container-high p-6 rounded-xl border border-outline-variant/30 space-y-4 hover-glow cursor-pointer" data-aos="fade-up" data-aos-delay="300">
-                    <span class="text-label-sm font-label-sm text-secondary">Technology</span>
-                    <h4 class="font-headline-md text-[20px]">Quantum Security in Agents</h4>
-                    <p class="text-body-md text-on-surface-variant">Securing autonomous decision making at the edge.</p>
-                </div>
+                <!-- Blogs -->
+                @php
+                    $displayBlogs = count($blogs) > 0 ? $blogs->take(2) : [
+                        (object)[
+                            'title' => 'The Future of Prompt Engineering',
+                            'summary' => 'Why LLMs are just the beginning of agentic workflows.',
+                            'categories' => ['Insights'],
+                            'slug' => '#'
+                        ],
+                        (object)[
+                            'title' => 'Quantum Security in Agents',
+                            'summary' => 'Securing autonomous decision making at the edge.',
+                            'categories' => ['Technology'],
+                            'slug' => '#'
+                        ]
+                    ];
+                @endphp
+                @foreach($displayBlogs as $bIdx => $b)
+                    @php
+                        $bCat = is_array($b->categories) && count($b->categories) > 0 ? $b->categories[0] : 'Insights';
+                        $bLink = $b->slug !== '#' ? route('front.blog.detail', $b->slug) : '#';
+                    @endphp
+                    <div onclick="window.location.href='{{ $bLink }}'" class="md:col-span-1 bg-surface-container-high p-6 rounded-xl border border-outline-variant/30 space-y-4 hover-glow cursor-pointer flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($bIdx + 2) * 100 }}">
+                        <div>
+                            <span class="text-label-sm font-label-sm text-secondary font-bold">{{ $bCat }}</span>
+                            <h4 class="font-headline-md text-[20px] mt-2">{{ $b->title }}</h4>
+                            <p class="text-body-md text-on-surface-variant mt-2">{{ $b->summary }}</p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -304,60 +319,53 @@
             <h2 class="font-headline-lg text-headline-lg">Trusted by <span class="text-secondary">Visionaries</span></h2>
         </div>
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
-            <div class="p-8 bg-surface border border-outline-variant/30 space-y-6 hover-glow transition-all cursor-default" data-aos="fade-up" data-aos-delay="100">
-                <div class="flex gap-1 text-secondary">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                </div>
-                <p class="text-body-lg italic font-body-lg">"The precision of these AI agents is unlike anything we've seen.
-                    Our operational overhead dropped by 40% in just three months."</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-secondary-fixed"></div>
-                    <div>
-                        <p class="font-headline-md text-[16px]">Sarah Jenkins</p>
-                        <p class="font-label-sm text-label-sm text-on-surface-variant">CTO, Nexus Corp</p>
+            @php
+                $bgClasses = ['bg-secondary-fixed', 'bg-primary-fixed', 'bg-tertiary-fixed'];
+                $displayReviews = count($reviews) > 0 ? $reviews->take(3) : [
+                    (object)[
+                        'reviewer_name' => 'Sarah Jenkins',
+                        'reviewer_title' => 'CTO, Nexus Corp',
+                        'rating' => 5,
+                        'comment' => "The precision of these AI agents is unlike anything we've seen. Our operational overhead dropped by 40% in just three months."
+                    ],
+                    (object)[
+                        'reviewer_name' => 'Marcus Thorne',
+                        'reviewer_title' => 'Security Lead, Vanta',
+                        'rating' => 5,
+                        'comment' => "Finally, a privacy platform that feels enterprise-ready. The 'Angled Notch' design language is a breath of fresh air in SaaS."
+                    ],
+                    (object)[
+                        'reviewer_name' => 'Elena Rodriguez',
+                        'reviewer_title' => 'Director of AI, Fintech Global',
+                        'rating' => 5,
+                        'comment' => "The level of transparency provided in their reporting makes auditing autonomous workflows a simple, daily task."
+                    ]
+                ];
+            @endphp
+            
+            @foreach($displayReviews as $idx => $rev)
+                <div class="p-8 bg-surface border border-outline-variant/30 space-y-6 hover-glow transition-all cursor-default flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($idx + 1) * 100 }}">
+                    <div class="space-y-6">
+                        <div class="flex gap-1 text-secondary">
+                            @for($i = 1; $i <= 5; $i++)
+                                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' {{ $i <= $rev->rating ? '1' : '0' }};">star</span>
+                            @endfor
+                        </div>
+                        <p class="text-body-lg italic font-body-lg text-on-surface-variant">"{{ $rev->comment }}"</p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-6">
+                        <div class="w-12 h-12 rounded-full {{ $bgClasses[$idx % 3] }} flex items-center justify-center text-on-surface font-bold text-sm uppercase">
+                            {{ substr($rev->reviewer_name, 0, 1) }}
+                        </div>
+                        <div>
+                            <p class="font-headline-md text-[16px] text-on-surface font-bold">{{ $rev->reviewer_name }}</p>
+                            @if(!empty($rev->reviewer_title))
+                                <p class="font-label-sm text-label-sm text-on-surface-variant">{{ $rev->reviewer_title }}</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="p-8 bg-surface border border-outline-variant/30 space-y-6 hover-glow transition-all cursor-default" data-aos="fade-up" data-aos-delay="200">
-                <div class="flex gap-1 text-secondary">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                </div>
-                <p class="text-body-lg italic font-body-lg">"Finally, a privacy platform that feels enterprise-ready. The
-                    'Angled Notch' design language is a breath of fresh air in SaaS."</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-primary-fixed"></div>
-                    <div>
-                        <p class="font-headline-md text-[16px]">Marcus Thorne</p>
-                        <p class="font-label-sm text-label-sm text-on-surface-variant">Security Lead, Vanta</p>
-                    </div>
-                </div>
-            </div>
-            <div class="p-8 bg-surface border border-outline-variant/30 space-y-6 hover-glow transition-all cursor-default" data-aos="fade-up" data-aos-delay="300">
-                <div class="flex gap-1 text-secondary">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-                </div>
-                <p class="text-body-lg italic font-body-lg">"The level of transparency provided in their reporting makes
-                    auditing autonomous workflows a simple, daily task."</p>
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-tertiary-fixed"></div>
-                    <div>
-                        <p class="font-headline-md text-[16px]">Elena Rodriguez</p>
-                        <p class="font-label-sm text-label-sm text-on-surface-variant">Director of AI, Fintech Global</p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
 @endsection
