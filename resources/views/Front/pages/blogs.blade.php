@@ -5,13 +5,13 @@
 
 
 @section('content')
-<div class="pt-32 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<div class="pt-24 pb-12 md:pb-section-gap px-6 md:px-margin-desktop max-w-7xl mx-auto">
     <!-- Hero Header & Search Bar -->
-    <header class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8" data-aos="fade-up">
+    <header class="mb-12 md:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8" data-aos="fade-up">
         <div class="max-w-2xl">
-            <div class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm mb-6 uppercase tracking-widest hover-glow cursor-default font-bold">Insights &amp; Intelligence</div>
-            <h1 class="text-headline-lg-mobile md:text-display-lg font-display-lg text-on-background mb-4">Architecting the future through precise AI automation.</h1>
-            <p class="text-body-lg font-body-lg text-on-surface-variant">Stay updated with the latest trends in neural networking, autonomous enterprise workflows, and the evolution of machine learning precision.</p>
+            <div class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-xs md:text-label-sm mb-4 md:mb-6 uppercase tracking-widest hover-glow cursor-default font-bold">Insights &amp; Intelligence</div>
+            <h1 class="text-3-xl md:text-display-lg font-display-lg text-on-background mb-4 leading-tight font-bold">Architecting the future through precise AI automation.</h1>
+            <p class="text-sm md:text-body-lg font-body-lg text-on-surface-variant">Stay updated with the latest trends in neural networking, autonomous enterprise workflows, and the evolution of machine learning precision.</p>
         </div>
         
         <!-- Search bar -->
@@ -52,23 +52,23 @@
             $featuredCat = is_array($featured->categories) && count($featured->categories) > 0 ? $featured->categories[0] : 'Insights';
             $featuredImg = $featured->main_image_url ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnr9b6aGtsgifoU1pFjdYkvGCYhYKns3yJzUSh1Bs2DyrCNZ3ozycpgMiyAr_Pzy2ARjhKD8WoG-eM7AYGGBJX5nG_UpXwi7uSEprZKMZkxi0ZhJqiuK-mQCrueKqLSlPMMukWtViiPrBYiRkjRxOuql3GIbGPQLfWrXNEbD7myKt5A0qU824GUqM86T95uF_p5fS3GSvinmnG-_3BSbnNYpX-uFxLv79Gavz1QZcdqPY1rpFu2ZUYvNCBo-l_jHwc43jb3ibVd-A';
         @endphp
-        <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-24">
-            <a href="{{ route('front.blog.detail', $featured->slug) }}" class="md:col-span-8 group relative overflow-hidden angled-notch bg-surface-container-low border border-outline-variant transition-all hover:border-secondary block hover-glow" data-aos="fade-right">
-                <div class="aspect-video relative overflow-hidden h-[380px]">
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-16 md:mb-24">
+            <a href="{{ route('front.blog.detail', $featured->slug) }}" class="md:col-span-8 group relative overflow-hidden angled-notch bg-surface-container-low border border-outline-variant transition-all hover:border-secondary block hover-glow mb-6 md:mb-0" data-aos="fade-right">
+                <div class="aspect-video relative overflow-hidden h-[220px] sm:h-[300px] md:h-[380px]">
                     <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ $featuredImg }}" alt="{{ $featured->title }}"/>
-                    <div class="absolute top-6 left-6">
-                        <span class="bg-surface/90 backdrop-blur-md text-secondary font-label-sm text-label-sm px-3 py-1 rounded-full border border-secondary/20 font-bold uppercase">{{ $featuredCat }}</span>
+                    <div class="absolute top-4 left-4 md:top-6 md:left-6">
+                        <span class="bg-surface/90 backdrop-blur-md text-secondary font-label-sm text-xs md:text-label-sm px-3 py-1 rounded-full border border-secondary/20 font-bold uppercase">{{ $featuredCat }}</span>
                     </div>
                 </div>
-                <div class="p-8">
-                    <div class="flex gap-4 items-center mb-4">
-                        <span class="text-label-sm font-label-sm text-on-tertiary-fixed-variant font-bold">LATEST INSIGHT</span>
+                <div class="p-6 md:p-8">
+                    <div class="flex gap-4 items-center mb-3 md:mb-4">
+                        <span class="text-xs md:text-label-sm font-label-sm text-on-tertiary-fixed-variant font-bold">LATEST INSIGHT</span>
                         <span class="text-outline-variant">•</span>
-                        <span class="text-label-sm font-label-sm text-on-tertiary-fixed-variant uppercase font-bold">{{ $featured->created_at->format('M d, Y') }}</span>
+                        <span class="text-xs md:text-label-sm font-label-sm text-on-tertiary-fixed-variant uppercase font-bold">{{ $featured->created_at->format('M d, Y') }}</span>
                     </div>
-                    <h2 class="text-headline-lg font-headline-lg mb-4 text-on-surface group-hover:text-secondary transition-colors font-bold">{{ $featured->title }}</h2>
-                    <p class="text-body-md font-body-md text-on-surface-variant mb-6 line-clamp-2">{{ $featured->summary }}</p>
-                    <div class="flex items-center gap-2 text-secondary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                    <h2 class="text-xl md:text-headline-lg font-headline-lg mb-3 md:mb-4 text-on-surface group-hover:text-secondary transition-colors font-bold leading-tight">{{ $featured->title }}</h2>
+                    <p class="text-sm md:text-body-md font-body-md text-on-surface-variant mb-6 line-clamp-2 leading-relaxed">{{ $featured->summary }}</p>
+                    <div class="flex items-center gap-2 text-secondary font-label-sm text-xs md:text-label-sm font-bold uppercase tracking-wider">
                         READ FULL CASE STUDY 
                         <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
                     </div>
@@ -76,28 +76,28 @@
             </a>
 
             <div class="md:col-span-4 flex flex-col gap-gutter" data-aos="fade-left" data-aos-delay="100">
-                <div class="flex-1 p-8 angled-notch bg-surface-container-low border border-outline-variant flex flex-col justify-center hover-glow transition-all">
-                    <h3 class="text-headline-md font-headline-md mb-4 text-on-surface font-bold">Subscribe to Intelligence</h3>
-                    <p class="text-body-md font-body-md text-on-surface-variant mb-6">Receive weekly deep-dives into automation engineering.</p>
+                <div class="flex-1 p-6 md:p-8 angled-notch bg-surface-container-low border border-outline-variant flex flex-col justify-center hover-glow transition-all mb-6 md:mb-0">
+                    <h3 class="text-lg md:text-headline-md font-headline-md mb-2 md:mb-4 text-on-surface font-bold">Subscribe to Intelligence</h3>
+                    <p class="text-sm md:text-body-md font-body-md text-on-surface-variant mb-6">Receive weekly deep-dives into automation engineering.</p>
                     <form onsubmit="event.preventDefault(); alert('Subscribed successfully!');" class="space-y-4">
                         <input class="w-full bg-white border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="email@enterprise.com" type="email" required/>
-                        <button type="submit" class="notch-button w-full bg-secondary text-white py-4 font-label-sm text-label-sm uppercase tracking-widest hover:bg-on-secondary-fixed-variant transition-all hover-glow font-bold">Join The Network</button>
+                        <button type="submit" class="notch-button w-full bg-secondary text-white py-4 font-label-sm text-xs md:text-label-sm uppercase tracking-widest hover:bg-on-secondary-fixed-variant transition-all hover-glow font-bold">Join The Network</button>
                     </form>
                 </div>
-                <div class="flex-1 p-8 angled-notch bg-secondary-container border border-secondary/20 flex flex-col justify-between hover-glow transition-all">
+                <div class="flex-1 p-6 md:p-8 angled-notch bg-secondary-container border border-secondary/20 flex flex-col justify-between hover-glow transition-all">
                     <div>
                         <span class="material-symbols-outlined text-on-secondary-container mb-4 text-3xl">terminal</span>
-                        <h4 class="text-headline-md font-headline-md text-on-secondary-container mb-2 font-bold">Developer Docs</h4>
-                        <p class="text-body-md font-body-md text-on-secondary-container opacity-80">Explore our latest API updates for autonomous integration.</p>
+                        <h4 class="text-lg md:text-headline-md font-headline-md text-on-secondary-container mb-2 font-bold">Developer Docs</h4>
+                        <p class="text-sm md:text-body-md font-body-md text-on-secondary-container opacity-80">Explore our latest API updates for autonomous integration.</p>
                     </div>
-                    <a class="text-on-secondary-container font-label-sm text-label-sm border-b border-on-secondary-container w-fit mt-4 font-bold" href="{{ route('front.contact') }}">CONTACT ENGINEERING</a>
+                    <a class="text-on-secondary-container font-label-sm text-xs md:text-label-sm border-b border-on-secondary-container w-fit mt-4 font-bold" href="{{ route('front.contact') }}">CONTACT ENGINEERING</a>
                 </div>
             </div>
         </section>
     @endif
 
     <!-- Article Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-x-gutter gap-y-16">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-x-gutter gap-y-12 md:gap-y-16">
         @php
             // Skip the first article if we are on page 1 and no active filters are set, since it was shown as featured.
             $articlesToDisplay = $blogs;
@@ -119,25 +119,25 @@
                         <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="{{ $blogImg }}" alt="{{ $blog->title }}"/>
                     </div>
                     <div class="flex gap-2 mb-3">
-                        <span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 font-label-sm text-label-sm rounded uppercase font-bold">{{ $blogCat }}</span>
+                        <span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 font-label-sm text-xs md:text-label-sm rounded uppercase font-bold">{{ $blogCat }}</span>
                     </div>
-                    <h3 class="text-headline-md font-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold">{{ $blog->title }}</h3>
-                    <p class="text-body-md font-body-md text-on-surface-variant mb-4 line-clamp-3">{{ $blog->summary }}</p>
+                    <h3 class="text-lg md:text-headline-md font-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold leading-snug">{{ $blog->title }}</h3>
+                    <p class="text-sm md:text-body-md font-body-md text-on-surface-variant mb-4 line-clamp-3 leading-relaxed">{{ $blog->summary }}</p>
                 </div>
                 <div class="flex items-center justify-between mt-4">
-                    <span class="text-label-sm font-label-sm text-outline font-bold uppercase">{{ $blog->created_at->format('M d, Y') }}</span>
+                    <span class="text-label-sm text-xs md:text-label-sm text-outline font-bold uppercase">{{ $blog->created_at->format('M d, Y') }}</span>
                     <span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
                 </div>
             </article>
         @empty
-            <div class="md:col-span-3 p-16 text-center text-on-surface-variant font-label-sm uppercase bg-surface-container-low border border-outline border-dashed rounded-xl">
+            <div class="md:col-span-3 p-8 md:p-16 text-center text-on-surface-variant font-label-sm uppercase bg-surface-container-low border border-outline border-dashed rounded-xl">
                 No blog posts found matching those filters.
             </div>
         @endforelse
     </section>
 
     <!-- Pagination -->
-    <div class="mt-24 font-label-sm">
+    <div class="mt-12 md:mt-24 font-label-sm">
         {{ $blogs->appends(request()->query())->links() }}
     </div>
 </div>
