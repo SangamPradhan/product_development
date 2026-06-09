@@ -67,8 +67,10 @@ class Project extends Model
             if (str_starts_with($this->featured_image, 'http')) {
                 return $this->featured_image;
             }
-            return asset('storage/projects/' . $this->featured_image);
+
+            return asset('storage/projects/'.$this->featured_image);
         }
+
         return null;
     }
 
@@ -83,4 +85,9 @@ class Project extends Model
     //             : null,
     //     );
     // }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

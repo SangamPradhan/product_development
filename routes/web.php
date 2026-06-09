@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\GalleryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [FrontController::class, 'home'])->name('front.home');
@@ -24,6 +25,14 @@ Route::get('/blogs/{slug}', [FrontController::class, 'blogDetail'])->name('front
 Route::get('/contact', [FrontController::class, 'contact'])->name('front.contact');
 Route::post('/contact', [FrontController::class, 'contactStore'])->name('front.contact.store');
 Route::post('/events/{id}/book', [FrontController::class, 'bookEvent'])->name('front.event.book');
+
+Route::post('/chatbot/stream', [ChatbotController::class, 'stream'])
+    ->name('chatbot.stream')
+    ->middleware('web');
+
+Route::get('/chatbot/history', [ChatbotController::class, 'history'])
+    ->name('chatbot.history')
+    ->middleware('web');
 
 // Admin Dashboard & Auth Routes
 Route::prefix('admin')->group(function () {
