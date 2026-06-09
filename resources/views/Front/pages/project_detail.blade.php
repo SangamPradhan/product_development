@@ -29,7 +29,7 @@
 
 @section('content')
 <div id="project-detail-root">
-    <p class="text-center py-24 text-on-surface-variant px-margin-desktop">Loading project...</p>
+    <p class="text-center py-24 text-on-surface-variant px-6 md:px-margin-desktop">Loading project...</p>
 </div>
 @endsection
 
