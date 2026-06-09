@@ -17,5 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         // Seed additional user details (admin/staff) and roles
         $this->call(UserDetailsSeeder::class);
+
+        // Seed sample projects for the frontend
+        $this->call(ProjectSeeder::class);
+
+        // Seed sample services with short_description
+        $this->call(ServiceSeeder::class);
     }
 }
