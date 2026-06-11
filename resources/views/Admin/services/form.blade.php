@@ -16,6 +16,14 @@
 </div>
 
 <div class="grid grid-cols-1 gap-6">
+    <!-- Short Description -->
+    <div>
+        <label for="short_description" class="block font-label-sm text-xs text-on-surface-variant uppercase mb-2">Short Description</label>
+        <input type="text" name="short_description" id="short_description" value="{{ old('short_description', $service->short_description ?? '') }}" required
+               class="w-full bg-surface-container-low border border-outline rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-all font-body-md text-sm"
+               placeholder="Brief, one-sentence summary for bento grid cards">
+    </div>
+
     <!-- Status -->
     <div>
         <label for="status" class="block font-label-sm text-xs text-on-surface-variant uppercase mb-2">Status</label>

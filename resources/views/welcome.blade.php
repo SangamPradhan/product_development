@@ -59,8 +59,37 @@
     <!-- About Us Section (Angled Corners) -->
     <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface" id="about">
         <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center">
-                <div class="space-y-8" data-aos="fade-right">
+            @php
+                $displayServices = count($services) > 0 ? $services : [
+                    (object)[
+                        'title' => 'Personal Information Removal',
+                        'short_description' => 'Lets users quickly find answers to their questions without searching through multiple sources.',
+                        'description' => 'Lets users quickly find answers to their questions without searching through multiple sources.',
+                        'icon' => 'security',
+                        'slug' => '#'
+                    ],
+                    (object)[
+                        'title' => 'Cloaking Alias Profiles',
+                        'short_description' => 'Generate unlimited virtual identities for total online privacy.',
+                        'description' => 'Generate unlimited virtual identities for total online privacy.',
+                        'icon' => 'shield_person',
+                        'slug' => '#'
+                    ],
+                    (object)[
+                        'title' => 'Virtual Identities Security',
+                        'short_description' => 'The next-level in privacy protection for online and travel.',
+                        'description' => 'The next-level in privacy protection for online and travel.',
+                        'icon' => 'verified_user',
+                        'slug' => '#'
+                    ]
+                ];
+                $topServices = collect($displayServices)->take(2);
+                $bottomServices = collect($displayServices)->slice(2);
+            @endphp
+
+            <!-- Top Row: Mission Text + 2 Service Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter items-center">
+                <div class="lg:col-span-1 space-y-8" data-aos="fade-right">
                     <div class="inline-block">
                         <span
                             class="bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm px-4 py-1 rounded-full uppercase tracking-widest hover-glow inline-block">Our
@@ -85,35 +114,13 @@
                         </div>
                     </div>
                 </div>
-                @php
-                    $displayServices = count($services) > 0 ? $services : [
-                        (object)[
-                            'title' => 'Personal Information Removal',
-                            'description' => 'Lets users quickly find answers to their questions without searching through multiple sources.',
-                            'icon' => 'security',
-                            'slug' => '#'
-                        ],
-                        (object)[
-                            'title' => 'Cloaking Alias Profiles',
-                            'description' => 'Generate unlimited virtual identities for total online privacy.',
-                            'icon' => 'shield_person',
-                            'slug' => '#'
-                        ],
-                        (object)[
-                            'title' => 'Virtual Identities Security',
-                            'description' => 'The next-level in privacy protection for online and travel.',
-                            'icon' => 'verified_user',
-                            'slug' => '#'
-                        ]
-                    ];
-                @endphp
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:w-[150%] xl:w-[170%]">
-                    @foreach($displayServices as $idx => $ser)
-                        <div class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 md:col-span-1 hover-glow cursor-pointer flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($idx + 1) * 100 }}">
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    @foreach($topServices as $idx => $ser)
+                        <div class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 hover-glow cursor-pointer flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($idx + 1) * 100 }}">
                             <div>
                                 <span class="material-symbols-outlined text-secondary text-[40px]">{{ $ser->icon }}</span>
                                 <h3 class="font-headline-md text-headline-md mt-4">{{ $ser->title }}</h3>
-                                <p class="font-body-md text-body-md text-on-surface-variant mt-2">{{ $ser->description }}</p>
+                                <p class="font-body-md text-body-md text-on-surface-variant mt-2">{{ $ser->short_description ?? Str::limit(strip_tags($ser->description), 120) }}</p>
                             </div>
                             <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group mt-6" href="{{ route('front.services') }}">
                                 Explore More
@@ -123,6 +130,25 @@
                     @endforeach
                 </div>
             </div>
+
+            <!-- Bottom Row: Remaining Service Cards -->
+            @if($bottomServices->count() > 0)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                    @foreach($bottomServices as $idx => $ser)
+                        <div class="angled-notch bg-surface-container-low p-8 border border-outline-variant/30 space-y-6 hover-glow cursor-pointer flex flex-col justify-between" data-aos="fade-up" data-aos-delay="{{ ($idx + 3) * 100 }}">
+                            <div>
+                                <span class="material-symbols-outlined text-secondary text-[40px]">{{ $ser->icon }}</span>
+                                <h3 class="font-headline-md text-headline-md mt-4">{{ $ser->title }}</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mt-2">{{ $ser->short_description ?? Str::limit(strip_tags($ser->description), 120) }}</p>
+                            </div>
+                            <a class="flex items-center gap-2 font-label-sm text-label-sm text-secondary group mt-6" href="{{ route('front.services') }}">
+                                Explore More
+                                <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
     <!-- Why Choose Us: Scrollable Section -->
@@ -264,8 +290,8 @@
                 @php
                     $eventTitle = $featuredEvent ? $featuredEvent->title : 'AI-Solutions Summit';
                     $eventDate = $featuredEvent ? $featuredEvent->event_date->format('M d, Y') : 'Oct 24, 2024';
-                    $eventDesc = $featuredEvent ? Str::limit($featuredEvent->description, 100) : 'Join us for the largest gathering of automation engineers in San Francisco.';
-                    $eventLink = $featuredEvent ? route('front.event.detail', $featuredEvent->slug) : '#';
+                    $eventDesc = $featuredEvent ? Str::limit(strip_tags($featuredEvent->description), 100) : 'Join us for the largest gathering of automation engineers in San Francisco.';
+                    $eventLink = $featuredEvent ? route('front.event.detail', $featuredEvent->slug) : route('front.events');
                 @endphp
                 <div class="md:col-span-2 bg-secondary-container p-8 rounded-xl border border-outline-variant/30 flex flex-col justify-between hover-glow" data-aos="fade-left" data-aos-delay="100">
                     <div>
@@ -366,6 +392,74 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </section>
+    <!-- Latest from the Blog -->
+    <section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <h2 class="font-headline-lg text-headline-lg">Latest from the <span class="text-secondary">Blog</span></h2>
+                <a class="font-label-sm text-label-sm text-on-surface-variant underline hover:text-secondary"
+                    href="{{ route('front.blogs') }}">View all posts</a>
+            </div>
+            @php
+                $homepageBlogs = count($blogs) > 0 ? $blogs->take(3) : [
+                    (object)[
+                        'title' => 'The Future of Prompt Engineering',
+                        'summary' => 'Why LLMs are just the beginning of agentic workflows and how enterprises can prepare for the next wave.',
+                        'categories' => ['Insights'],
+                        'tags' => ['AI'],
+                        'main_image_url' => null,
+                        'slug' => '#',
+                        'created_at' => now()
+                    ],
+                    (object)[
+                        'title' => 'Quantum Security in Autonomous Agents',
+                        'summary' => 'Securing autonomous decision making at the edge with post-quantum cryptographic protocols.',
+                        'categories' => ['Technology'],
+                        'tags' => ['Security'],
+                        'main_image_url' => null,
+                        'slug' => '#',
+                        'created_at' => now()
+                    ],
+                    (object)[
+                        'title' => 'Building Scalable AI Pipelines',
+                        'summary' => 'A deep dive into orchestrating multi-model inference pipelines for production workloads.',
+                        'categories' => ['Engineering'],
+                        'tags' => ['Infrastructure'],
+                        'main_image_url' => null,
+                        'slug' => '#',
+                        'created_at' => now()
+                    ]
+                ];
+            @endphp
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-gutter gap-y-12">
+                @foreach($homepageBlogs as $bIdx => $blogPost)
+                    @php
+                        $bpCat = is_array($blogPost->categories) && count($blogPost->categories) > 0 ? $blogPost->categories[0] : 'Insights';
+                        $bpImg = $blogPost->main_image_url ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuAi96HfzQ4NktrS45oP6jT1yAxMv85Pj8pFVUEbgjOVuA01513DpCDybVvT6ks7YpVyZaARXVFMe8coxshAW19ktsUlgbF8ix3opYZpGYe3YeTf9ToDVGg1_uytap7vREbckgFx19vYT5W4sgTJeqpk5gFz1CAF-C6WkD0KwbdlKYD28GHYe_csnZb17TEcgWk2ZE8Uw6zbT5jRJEzIf0gbL87Ct60MWj2AWEYTCyVC0wci7uUTLpjwgyD8YxzYXMpK0ACr675eQ4g';
+                        $bpLink = $blogPost->slug !== '#' ? route('front.blog.detail', $blogPost->slug) : '#';
+                    @endphp
+                    <article class="group cursor-pointer hover-glow p-4 rounded-xl transition-all flex flex-col justify-between"
+                             onclick="window.location='{{ $bpLink }}'" 
+                             data-aos="fade-up" data-aos-delay="{{ ($bIdx + 1) * 100 }}">
+                        <div>
+                            <div class="aspect-[4/3] overflow-hidden angled-notch mb-6 bg-surface-container-low border border-outline-variant">
+                                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="{{ $bpImg }}" alt="{{ $blogPost->title }}"/>
+                            </div>
+                            <div class="flex gap-2 mb-3">
+                                <span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-0.5 font-label-sm text-xs md:text-label-sm rounded uppercase font-bold">{{ $bpCat }}</span>
+                            </div>
+                            <h3 class="text-lg md:text-headline-md font-headline-md text-on-surface mb-3 group-hover:text-secondary transition-colors font-bold leading-snug">{{ $blogPost->title }}</h3>
+                            <p class="text-sm md:text-body-md font-body-md text-on-surface-variant mb-4 line-clamp-3 leading-relaxed">{{ $blogPost->summary }}</p>
+                        </div>
+                        <div class="flex items-center justify-between mt-4">
+                            <span class="text-label-sm text-xs md:text-label-sm text-outline font-bold uppercase">{{ $blogPost->created_at->format('M d, Y') }}</span>
+                            <span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_outward</span>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
         </div>
     </section>
 @endsection

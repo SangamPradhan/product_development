@@ -13,7 +13,7 @@
                 <div class="flex items-center gap-4">
                     <div>
                         <h4 class="font-bold text-on-surface">{{ $item->title }}</h4>
-                        <p class="text-sm text-on-surface-variant">{{ Str::limit($item->description, 60) }}</p>
+                        <p class="text-sm text-on-surface-variant">{{ Str::limit(strip_tags($item->description), 60) }}</p>
                     </div>
                 </div>
             </td>
