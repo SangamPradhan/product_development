@@ -197,7 +197,7 @@
                             <input
                                 class="bg-surface-container-low px-4 border border-outline focus:border-primary rounded-lg outline-none placeholder:text-outline-variant focus:ring-1 focus:ring-primary w-full h-12 font-label-sm text-on-surface transition-all"
                                 id="email" name="email" value="{{ old('email') }}"
-                                placeholder="admin@Astroamrit.com.np" type="email" required autofocus />
+                                placeholder="admin@example.com" type="email" required autofocus />
                         </div>
                     </div>
 

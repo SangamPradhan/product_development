@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     
     <meta name="admin-login-url" content="{{ route('admin.login') }}"/>
-    <title>@yield('title', 'Lumina Admin') - Lumina AI</title>
+    <title>@yield('title', 'AI Solutions Admin') - AI Solutions</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -15,22 +15,35 @@
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Quill Editor overrides to prevent overlapping inputs below */
+        /* Quill Editor — block formatting context so it never overlaps siblings */
+        .quill-editor-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
         .ql-container.ql-snow {
             height: auto !important;
             border-bottom-left-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
             border: 1px solid #e2e8f0 !important;
             background-color: #eef6e8;
+            flex: 1 1 auto;
         }
         .ql-toolbar.ql-snow {
             border-top-left-radius: 0.5rem;
             border-top-right-radius: 0.5rem;
             border: 1px solid #e2e8f0 !important;
             background-color: #e8f1e2;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
         .ql-editor {
-            min-height: 200px;
+            min-height: 180px;
+            max-height: 400px;
+            overflow-y: auto;
             font-family: inherit;
             font-size: 0.875rem;
         }
@@ -199,7 +212,7 @@
 <!-- SideNavBar (Desktop Only) -->
 <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline flex flex-col pt-20 z-40 hidden md:flex">
     <div class="px-6 mb-8">
-        <div class="font-label-sm text-label-sm font-black text-primary uppercase tracking-widest">Lumina Admin</div>
+        <div class="font-label-sm text-label-sm font-black text-primary uppercase tracking-widest">Admin Dashboard</div>
         <div class="text-[10px] text-on-surface-variant uppercase tracking-wider mt-1">Technical Intelligence</div>
     </div>
     
@@ -231,6 +244,14 @@
         <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.reviews.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.reviews.index') }}">
             <span class="material-symbols-outlined mr-3">rate_review</span>
             <span>Feedbacks</span>
+        </a>
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.bookings.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.bookings.index') }}">
+            <span class="material-symbols-outlined mr-3">event_available</span>
+            <span>Bookings</span>
+        </a>
+        <a class="mx-2 flex items-center px-4 py-3 font-label-sm rounded-lg transition-all {{ request()->routeIs('admin.contacts.*') ? 'bg-secondary-container text-on-secondary-container font-bold translate-x-1' : 'text-on-surface-variant hover:bg-surface-variant hover:translate-x-1' }}" href="{{ route('admin.contacts.index') }}">
+            <span class="material-symbols-outlined mr-3">contacts</span>
+            <span>Inquiries</span>
         </a>
     </nav>
     
@@ -348,7 +369,9 @@
                 icon: 'success',
                 title: 'Success',
                 text: {!! json_encode(session('success')) !!},
-                confirmButtonColor: '#006e22'
+                confirmButtonColor: '#006e22',
+                timer: 3000,
+                timerProgressBar: true
             });
         @endif
 
@@ -378,6 +401,32 @@
                 confirmButtonColor: '#ba1a1a'
             });
         @endif
+    });
+</script>
+<script>
+    /* ─── SweetAlert Delete Confirmation ─── */
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.swal-delete-form').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const thisForm = this;
+                Swal.fire({
+                    title: 'Confirm Deletion',
+                    text: thisForm.dataset.confirmMsg || 'Are you sure you want to delete this item? This cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ba1a1a',
+                    cancelButtonColor: '#747878',
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    reverseButtons: true
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        thisForm.submit();
+                    }
+                });
+            });
+        });
     });
 </script>
 @stack('scripts')
