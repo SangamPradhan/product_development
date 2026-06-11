@@ -106,7 +106,7 @@
                             @endif
 
                             <!-- Delete button -->
-                            <form action="{{ route('admin.reviews.delete', $review->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this review completely? This action cannot be undone.')">
+                            <form action="{{ route('admin.reviews.delete', $review->id) }}" method="POST" class="inline swal-delete-form" data-confirm-msg="Are you sure you want to delete this review completely? This action cannot be undone.">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-2 text-error hover:text-error-container transition-colors flex items-center" title="Delete Review">
