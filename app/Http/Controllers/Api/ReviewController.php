@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Review;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewController extends Controller
 {
@@ -26,7 +27,7 @@ class ReviewController extends Controller
             ->get();
 
         return response()->json([
-            'data' => $reviews
+            'data' => $reviews,
         ]);
     }
 
@@ -53,9 +54,30 @@ class ReviewController extends Controller
 
         $review = Review::create($validated);
 
+        $mailError = null;
+        try {
+            Mail::send('emails.review_thanks', [
+                'name' => $review->reviewer_name,
+                'projectTitle' => $projectModel->title,
+                'comment' => $review->comment,
+                'rating' => $review->rating,
+            ], function ($mail) use ($review, $projectModel) {
+                $mail->to($review->reviewer_email, $review->reviewer_name)
+                    ->subject('Thank you for your review: '.$projectModel->title);
+            });
+        } catch (\Throwable $e) {
+            $mailError = $e->getMessage();
+        }
+
+        $message = 'Thank you! Your review has been submitted and is pending admin approval.';
+        if ($mailError) {
+            $message .= ' Note: We could not send a confirmation email due to: '.$mailError.'. Please make sure your email address is correct.';
+        }
+
         return response()->json([
-            'message' => 'Thank you! Your review has been submitted and is pending admin approval.',
-            'data' => $review
+            'message' => $message,
+            'data' => $review,
+            'mail_error' => $mailError,
         ], 201);
     }
 }
