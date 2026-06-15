@@ -64,7 +64,7 @@
                     </a>
                     
                     <!-- Delete Action -->
-                    <form action="{{ route('admin.news.delete', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this blog entry?');">
+                    <form action="{{ route('admin.news.delete', $item->id) }}" method="POST" class="swal-delete-form" data-confirm-msg="Are you sure you want to remove this blog entry?">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors">
