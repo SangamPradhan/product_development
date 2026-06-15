@@ -152,6 +152,156 @@
         </a>`;
     }
 
+    function initStarRating() {
+        const container = document.getElementById('star-rating-container');
+        const input = document.getElementById('selected-rating');
+        if (!container || !input) return;
+
+        const stars = container.querySelectorAll('[data-rating]');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.getAttribute('data-rating'));
+                input.value = rating;
+                
+                stars.forEach(s => {
+                    const r = parseInt(s.getAttribute('data-rating'));
+                    s.style.fontVariationSettings = r <= rating ? "'FILL' 1" : "'FILL' 0";
+                });
+            });
+        });
+    }
+
+    function initReviewSubmit(projectSlug) {
+        const form = document.getElementById('review-submit-form');
+        const alertMsg = document.getElementById('form-alert-message');
+        if (!form) return;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alertMsg.classList.add('hidden');
+            alertMsg.className = 'font-label-sm text-xs mt-4';
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Posting...</span>';
+
+            const payload = {
+                reviewer_name: document.getElementById('reviewer_name').value,
+                reviewer_email: document.getElementById('reviewer_email').value,
+                reviewer_title: document.getElementById('reviewer_title').value,
+                rating: parseInt(document.getElementById('selected-rating').value),
+                comment: document.getElementById('review_comment').value
+            };
+
+            try {
+                const response = await api.post(`/projects/${encodeURIComponent(projectSlug)}/reviews`, JSON.stringify(payload));
+                alertMsg.textContent = response?.message || 'Review submitted successfully!';
+                alertMsg.classList.remove('hidden');
+                alertMsg.classList.add('text-secondary');
+                form.reset();
+                
+                document.getElementById('selected-rating').value = '4';
+                const stars = document.querySelectorAll('#star-rating-container [data-rating]');
+                stars.forEach(s => {
+                    const r = parseInt(s.getAttribute('data-rating'));
+                    s.style.fontVariationSettings = r <= 4 ? "'FILL' 1" : "'FILL' 0";
+                });
+
+            } catch (err) {
+                console.error('Submit review error:', err);
+                const errorMsg = err?.payload?.message || err.message || 'Failed to submit review. Please try again.';
+                alertMsg.textContent = errorMsg;
+                alertMsg.classList.remove('hidden');
+                alertMsg.classList.add('text-error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+            }
+        });
+    }
+
+    function initReviewsCarousel() {
+        const carousel = document.getElementById('reviews-carousel');
+        const inner = document.getElementById('reviews-carousel-inner');
+        if (!carousel || !inner) return;
+
+        const items = inner.children;
+        if (items.length > 2 && inner.scrollHeight > carousel.clientHeight) {
+            const originalContent = inner.innerHTML;
+            inner.innerHTML = originalContent + originalContent;
+
+            let scrollSpeed = 0.4;
+            let scrollPos = 0;
+            let animationFrameId;
+
+            function step() {
+                scrollPos += scrollSpeed;
+                if (scrollPos >= inner.scrollHeight / 2) {
+                    scrollPos = 0;
+                }
+                carousel.scrollTop = scrollPos;
+                animationFrameId = requestAnimationFrame(step);
+            }
+
+            carousel.addEventListener('mouseenter', () => {
+                cancelAnimationFrame(animationFrameId);
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                animationFrameId = requestAnimationFrame(step);
+            });
+
+            animationFrameId = requestAnimationFrame(step);
+        }
+    }
+
+    async function loadAndRenderReviews(projectSlug) {
+        const inner = document.getElementById('reviews-carousel-inner');
+        if (!inner) return;
+
+        try {
+            const response = await api.get(`/projects/${encodeURIComponent(projectSlug)}/reviews`);
+            const reviews = response?.data || [];
+
+            if (reviews.length === 0) {
+                inner.innerHTML = '<p class="text-on-surface-variant text-center py-12 italic">No approved reviews yet. Be the first to review!</p>';
+                return;
+            }
+
+            inner.innerHTML = reviews.map((rev) => {
+                const ratingStars = Array.from({ length: 5 }, (_, idx) => {
+                    const filled = idx < rev.rating ? '1' : '0';
+                    return `<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' ${filled};">star</span>`;
+                }).join('');
+
+                const designationMarkup = rev.reviewer_title 
+                    ? `<span class="text-label-sm font-label-sm text-on-surface-variant">${escapeHtml(rev.reviewer_title)}</span>`
+                    : '';
+
+                return `
+                <div class="p-8 bg-white border border-outline-variant/20 angled-notch shadow-sm hover-glow transition-all">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h5 class="text-headline-md font-headline-md leading-none">${escapeHtml(rev.reviewer_name)}</h5>
+                            ${designationMarkup}
+                        </div>
+                        <div class="flex text-secondary">
+                            ${ratingStars}
+                        </div>
+                    </div>
+                    <p class="text-on-surface-variant italic">"${escapeHtml(rev.comment)}"</p>
+                </div>`;
+            }).join('');
+
+            initReviewsCarousel();
+
+        } catch (err) {
+            console.error('Error loading reviews:', err);
+            inner.innerHTML = '<p class="text-error text-center py-12 font-label-sm">Failed to load reviews.</p>';
+        }
+    }
+
     function renderDetail(project) {
         const root = document.getElementById('project-detail-root');
         if (!root || !project) return;
@@ -255,12 +405,72 @@
                     ${sideImage}
                 </div>
             </section>
+
+            <!-- User Reviews & Ratings -->
+            <section class="mb-section-gap py-section-gap border-t border-outline-variant/30">
+                <h2 class="text-headline-lg font-headline-lg text-on-background mb-12">User Reviews &amp; Ratings</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+                    <!-- Review Form -->
+                    <div class="lg:col-span-5" data-aos="fade-right">
+                        <div class="bg-surface-container-low p-8 angled-notch border border-outline-variant/30 hover-glow transition-all">
+                            <h3 class="text-headline-md font-headline-md mb-6">Submit Your Review</h3>
+                            <form id="review-submit-form" class="space-y-6">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-label-sm font-label-sm text-on-surface-variant">NAME</label>
+                                        <input id="reviewer_name" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="John Doe" type="text"/>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label class="text-label-sm font-label-sm text-on-surface-variant">EMAIL</label>
+                                        <input id="reviewer_email" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="john@example.com" type="email"/>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-label-sm font-label-sm text-on-surface-variant">DESIGNATION / COMPANY (OPTIONAL)</label>
+                                    <input id="reviewer_title" class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="e.g. CTO, Nexus Corp" type="text"/>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-label-sm font-label-sm text-on-surface-variant">RATING</label>
+                                    <div id="star-rating-container" class="flex gap-2 text-secondary">
+                                        <span class="material-symbols-outlined cursor-pointer" data-rating="1" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <span class="material-symbols-outlined cursor-pointer" data-rating="2" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <span class="material-symbols-outlined cursor-pointer" data-rating="3" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <span class="material-symbols-outlined cursor-pointer" data-rating="4" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <span class="material-symbols-outlined cursor-pointer" data-rating="5" style="font-variation-settings: 'FILL' 0;">star</span>
+                                    </div>
+                                    <input type="hidden" id="selected-rating" value="4"/>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-label-sm font-label-sm text-on-surface-variant">YOUR REVIEW</label>
+                                    <textarea id="review_comment" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch resize-none" placeholder="Share your experience..." rows="4"></textarea>
+                                </div>
+                                <button class="w-full bg-secondary text-white py-4 angled-notch font-bold text-label-sm uppercase tracking-widest hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors flex justify-center items-center gap-2" type="submit">
+                                    <span>Post Review</span>
+                                </button>
+                                <div id="form-alert-message" class="hidden font-label-sm text-xs mt-4"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Existing Reviews -->
+                    <div class="lg:col-span-7" data-aos="fade-left" data-aos-delay="100">
+                        <div id="reviews-carousel" class="overflow-hidden relative max-h-[500px]" style="height: 480px;">
+                            <div id="reviews-carousel-inner" class="space-y-gutter">
+                                <p class="text-on-surface-variant text-center py-12">Loading reviews...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>`;
 
         const overviewEl = root.querySelector('[data-project-overview]');
         if (overviewEl) {
             overviewEl.innerHTML = project.overview || '';
         }
+
+        initStarRating();
+        initReviewSubmit(project.slug);
+        loadAndRenderReviews(project.slug);
 
         if (typeof AOS !== 'undefined') {
             setTimeout(() => {
