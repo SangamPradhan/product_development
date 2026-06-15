@@ -12,7 +12,7 @@
     <p class="text-on-surface-variant font-label-sm uppercase tracking-wider">Modify active system data & sync adjustments</p>
 </div>
 
-<div class="max-w-4xl">
+<div class="w-full max-w-6xl">
     <div class="bg-surface border border-outline angled-notch p-8 md:p-10 shadow-sm relative group">
         <form id="project-api-form" class="space-y-6" enctype="multipart/form-data" data-project-id="{{ $project->id }}">
             @include('Admin.projects.form', ['item' => $project])

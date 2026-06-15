@@ -144,14 +144,14 @@
                        id="technologies" name="technologies" value="{{ old('technologies', $project->technologies ?? '') }}" placeholder="PyTorch, Kubernetes, Kafka" type="text"/>
             </div>
             
-            <!-- Overview -->
+            <!-- Overview (Rich Text via Quill) -->
             <div class="space-y-2 md:col-span-2">
-                <label class="text-on-surface-variant flex items-center gap-2" for="overview">
+                <label class="text-on-surface-variant flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">article</span>
-                    DETAILED OVERVIEW (Supports HTML/Paragraphs)
+                    DETAILED OVERVIEW (Rich Text Editor)
                 </label>
-                <textarea class="w-full min-h-[200px] p-4 bg-surface-container-low border border-outline rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none text-on-surface placeholder:text-outline-variant font-body-md" 
-                          id="overview" name="overview" placeholder="<p>The global supply chain...</p>">{{ old('overview', $project->overview ?? '') }}</textarea>
+                <div class="quill-editor-container bg-surface-container-low border border-outline rounded-lg" data-placeholder="Write detailed project overview..." style="min-height: 250px;"></div>
+                <input type="hidden" name="overview" id="overview" value="{{ old('overview', $project->overview ?? '') }}">
             </div>
         </div>
     </div>
