@@ -1,36 +1,52 @@
 /* Universal styling for AI-Solutions Front-End pages */
 
-.angled-notch {
-    clip-path: polygon(
-        0 0, 
-        calc(100% - 40px) 0, 
-        100% 40px, 
-        100% 100%, 
-        40px 100%, 
-        0 calc(100% - 40px)
-    );
-}
-
-.angled-notch-lg {
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 32px), calc(100% - 32px) 100%, 0 100%);
-}
-
-.angled-notch-reverse {
-    clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+/* Default card styling for mobile views to prevent ugly borders/box-clipping */
+.angled-notch,
+.angled-notch-lg,
+.angled-notch-reverse,
+.notched-card {
+    transition: all 0.3s ease;
 }
 
 .notched-card {
-    clip-path: polygon(
-        20px 0%, 100% 0%, 
-        100% calc(100% - 20px), calc(100% - 20px) 100%, 
-        0% 100%, 0% 20px
-    );
     background-color: #F8FAFC;
     border: 1px solid #E2E8F0;
+    border-radius: 12px;
 }
 
 .notched-card:hover {
     border-color: #006e22; /* Secondary Green */
+}
+
+/* Enable complex angled cutouts ONLY on desktop screens */
+@media (min-width: 768px) {
+    .angled-notch {
+        clip-path: polygon(
+            0 0, 
+            calc(100% - 40px) 0, 
+            100% 40px, 
+            100% 100%, 
+            40px 100%, 
+            0 calc(100% - 40px)
+        );
+    }
+    
+    .angled-notch-lg {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 32px), calc(100% - 32px) 100%, 0 100%);
+    }
+    
+    .angled-notch-reverse {
+        clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+    }
+    
+    .notched-card {
+        clip-path: polygon(
+            20px 0%, 100% 0%, 
+            100% calc(100% - 20px), calc(100% - 20px) 100%, 
+            0% 100%, 0% 20px
+        );
+        border-radius: 0;
+    }
 }
 
 .notch-container {
