@@ -30,4 +30,13 @@ class ProjectController extends Controller
             'project' => $project,
         ]);
     }
+
+    public function show(Project $project)
+    {
+        return view('Admin.projects.show', [
+            'title' => 'Project Details',
+            'route' => 'admin.projects.',
+            'project' => $project,
+        ]);
+    }
 }
