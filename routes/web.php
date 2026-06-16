@@ -51,13 +51,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/news', [AdminController::class, 'newsIndex'])->name('admin.news.index');
         Route::get('/news/create', [AdminController::class, 'newsCreate'])->name('admin.news.create');
         Route::post('/news/store', [AdminController::class, 'newsStore'])->name('admin.news.store');
+        Route::get('/news/{id}', [AdminController::class, 'newsShow'])->name('admin.news.show');
         Route::get('/news/{id}/edit', [AdminController::class, 'newsEdit'])->name('admin.news.edit');
         Route::put('/news/{id}/update', [AdminController::class, 'newsUpdate'])->name('admin.news.update');
         Route::delete('/news/{id}/delete', [AdminController::class, 'newsDelete'])->name('admin.news.delete');
 
         // Projects admin UI (data via REST API)
         Route::resource('projects', ProjectController::class, ['as' => 'admin'])
-            ->only(['index', 'create', 'edit']);
+            ->only(['index', 'create', 'edit', 'show']);
 
         // Reviews admin UI (server-side Blade)
         Route::get('/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
@@ -68,10 +69,12 @@ Route::prefix('admin')->group(function () {
 
         // Event Bookings dashboard
         Route::get('/bookings', [AdminController::class, 'bookingsIndex'])->name('admin.bookings.index');
+        Route::get('/bookings/{booking}', [AdminController::class, 'bookingShow'])->name('admin.bookings.show');
         Route::delete('/bookings/{booking}/delete', [AdminController::class, 'bookingDelete'])->name('admin.bookings.delete');
 
         // Contact / Inquiries dashboard
         Route::get('/contacts', [AdminController::class, 'contactsIndex'])->name('admin.contacts.index');
+        Route::get('/contacts/{contact}', [AdminController::class, 'contactShow'])->name('admin.contacts.show');
         Route::delete('/contacts/{contact}/delete', [AdminController::class, 'contactDelete'])->name('admin.contacts.delete');
 
         // Services CRUD
