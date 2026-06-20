@@ -89,8 +89,11 @@
                 <td class="px-6 py-6"><div class="flex flex-wrap gap-1">${tagsHtml(item.tags)}</div></td>
                 <td class="px-8 py-6 text-right">
                     <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <a href="${routes.frontDetail}/${item.slug}" target="_blank" class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant transition-colors" title="View Project">
+                        <a href="${routes.show}/${item.id}" class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant transition-colors" title="View Admin Details">
                             <span class="material-symbols-outlined text-base">visibility</span>
+                        </a>
+                        <a href="${routes.frontDetail}/${item.slug}" target="_blank" class="p-2 hover:bg-surface-variant rounded-lg text-secondary transition-colors" title="View Live on Front">
+                            <span class="material-symbols-outlined text-base">open_in_new</span>
                         </a>
                         <a href="${routes.edit}/${item.id}/edit" class="p-2 hover:bg-secondary-container rounded-lg text-primary transition-colors">
                             <span class="material-symbols-outlined text-base">edit</span>
