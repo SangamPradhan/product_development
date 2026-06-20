@@ -205,4 +205,78 @@ class AdminController extends Controller
 
         return redirect()->route('admin.contacts.index')->with('success', 'Contact inquiry record deleted successfully.');
     }
+
+    /**
+     * Show details of a specific event booking.
+     */
+    public function bookingShow(EventBooking $booking)
+    {
+        $booking->load('event');
+        return view('Admin.bookings.show', [
+            'title' => 'Booking Details',
+            'booking' => $booking,
+            'route' => 'admin.bookings.',
+        ]);
+    }
+
+    /**
+     * Show details of a specific contact inquiry.
+     */
+    public function contactShow(ContactMessage $contact)
+    {
+        return view('Admin.contacts.show', [
+            'title' => 'Inquiry Details',
+            'contact' => $contact,
+            'route' => 'admin.contacts.',
+        ]);
+    }
+
+    /**
+     * Mock CRUD Show Detail for Blogs/News.
+     */
+    public function newsShow($id)
+    {
+        $title = 'Blog Details';
+        $route = 'admin.news.';
+        
+        $items = [
+            1 => (object)[
+                'id' => 1,
+                'title' => 'NeuralCore Alpha: AI Clusters',
+                'description' => 'Deep learning optimization cluster metrics and trends',
+                'content' => 'Lumina AI Clusters are currently undergoing deep learning optimizations. The cluster consists of 256 high-end tensor processing units configured with automated load balancing. Uptime has remained above 99.98% over the past 30 days, serving complex neural model queries at a sub-50ms latency profile.',
+                'status' => 'Active',
+                'health' => 92,
+                'timeline' => '24 Oct - 12 Jan',
+                'author' => 'Dr. Elizabeth Shaw',
+                'created_at' => now()->subDays(12),
+            ],
+            2 => (object)[
+                'id' => 2,
+                'title' => 'Future of Neural Networks in 2026',
+                'description' => 'A comprehensive review of upcoming generative architectures',
+                'content' => 'Generative network design is shifting from standard transformers to sparse evolutionary algorithms. This review details the performance implications, multi-modal alignment protocols, and the deployment pipelines for mid-2026 systems. Scalability is expected to increase by an order of magnitude.',
+                'status' => 'In Progress',
+                'health' => 78,
+                'timeline' => '01 Dec - Ongoing',
+                'author' => 'Dr. Elizabeth Shaw',
+                'created_at' => now()->subDays(5),
+            ],
+            3 => (object)[
+                'id' => 3,
+                'title' => 'Shield AI Threat Mitigation Protocol',
+                'description' => 'Security nodes and automated protection systems',
+                'content' => 'The Shield AI platform monitors and automatically intercepts potential database injection and brute force vectors. Utilizing unsupervised anomaly detection, the threat mitigation protocols identify patterns before they manifest as critical exploits. Version 4.1.2 patch is currently deployed across all major production subnets.',
+                'status' => 'Active',
+                'health' => 98,
+                'timeline' => '10 Jan - 30 Jun',
+                'author' => 'Administrator',
+                'created_at' => now()->subDays(2),
+            ],
+        ];
+
+        $blog = $items[$id] ?? abort(404);
+
+        return view('Admin.news.show', compact('title', 'route', 'blog'));
+    }
 }
