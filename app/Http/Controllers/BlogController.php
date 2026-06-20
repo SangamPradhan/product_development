@@ -19,6 +19,15 @@ class BlogController extends Controller
         ]);
     }
 
+    public function show(Blog $blog)
+    {
+        return view('Admin.blogs.show', [
+            'title' => 'Blog Details',
+            'route' => 'admin.blogs.',
+            'blog' => $blog,
+        ]);
+    }
+
     public function create()
     {
         return view('Admin.blogs.create', [
