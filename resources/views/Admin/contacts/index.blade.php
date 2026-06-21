@@ -53,6 +53,10 @@
                     </td>
                     <td class="px-8 py-5 text-right">
                         <div class="flex justify-end items-center gap-2">
+                            <!-- View Action -->
+                            <a href="{{ route('admin.contacts.show', $contact->id) }}" class="p-2 text-on-surface-variant hover:scale-110 transition-transform flex items-center" title="View Inquiry Details">
+                                <span class="material-symbols-outlined text-lg">visibility</span>
+                            </a>
                             <!-- Delete form with SweetAlert confirmation -->
                             <form action="{{ route('admin.contacts.delete', $contact->id) }}" method="POST" class="swal-delete-form inline" data-confirm-msg="Are you sure you want to delete this contact message record?">
                                 @csrf
