@@ -53,6 +53,7 @@
     window.adminProjectRoutes = {
         index: @json(route('admin.projects.index')),
         edit: @json(url('/admin/projects')),
+        show: @json(url('/admin/projects')),
         frontDetail: @json(url('/projects')),
     };
 </script>
