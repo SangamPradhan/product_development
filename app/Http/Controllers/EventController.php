@@ -20,6 +20,16 @@ class EventController extends Controller
         ]);
     }
 
+    public function show(Event $event)
+    {
+        $event->load('images');
+        return view('Admin.events.show', [
+            'title' => 'Event Details',
+            'route' => 'admin.events.',
+            'event' => $event,
+        ]);
+    }
+
     public function create()
     {
         return view('Admin.events.create', [
