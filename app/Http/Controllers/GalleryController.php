@@ -18,6 +18,15 @@ class GalleryController extends Controller
         ]);
     }
 
+    public function show(GalleryItem $gallery)
+    {
+        return view('Admin.gallery.show', [
+            'title' => 'Gallery Item Details',
+            'route' => 'admin.gallery.',
+            'item' => $gallery,
+        ]);
+    }
+
     public function create(Request $request)
     {
         $type = $request->query('type', 'image');
