@@ -58,6 +58,10 @@
             <!-- Action buttons -->
             <td class="px-8 py-6 text-right">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <!-- View Action -->
+                    <a href="{{ route('admin.news.show', $item->id) }}" class="p-2 hover:bg-surface-variant rounded-lg text-on-surface-variant transition-colors" title="View Blog Details">
+                        <span class="material-symbols-outlined text-base">visibility</span>
+                    </a>
                     <!-- Edit Action -->
                     <a href="{{ route('admin.news.edit', $item->id) }}" class="p-2 hover:bg-secondary-container rounded-lg text-primary transition-colors">
                         <span class="material-symbols-outlined text-base">edit</span>
