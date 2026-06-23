@@ -18,6 +18,15 @@ class ServiceController extends Controller
         ]);
     }
 
+    public function show(Service $service)
+    {
+        return view('Admin.services.show', [
+            'title' => 'Service Details',
+            'route' => 'admin.services.',
+            'service' => $service,
+        ]);
+    }
+
     public function create()
     {
         return view('Admin.services.create', [
