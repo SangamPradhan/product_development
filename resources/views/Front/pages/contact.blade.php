@@ -33,11 +33,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase font-bold text-xs">First Name</label>
-                        <input type="text" name="first_name" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="John" required>
+                        <input type="text" name="first_name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="John" required>
                     </div>
                     <div>
                         <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase font-bold text-xs">Last Name</label>
-                        <input type="text" name="last_name" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="Doe" required>
+                        <input type="text" name="last_name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="Doe" required>
                     </div>
                 </div>
                 <div>
@@ -55,7 +55,8 @@
                 </div>
                 <div>
                     <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase font-bold text-xs">Message</label>
-                    <textarea name="message" rows="5" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md resize-none rounded-lg" placeholder="How can we help you?" required></textarea>
+                    <textarea name="message" id="contact_message" rows="5" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md resize-none rounded-lg" placeholder="How can we help you?" required></textarea>
+                    <div id="contact_word_count" class="text-xs text-on-surface-variant mt-1 text-right">0 / 300 words</div>
                 </div>
                 <button type="submit" class="notch-button bg-secondary text-white px-6 md:px-8 py-3.5 md:py-4 font-label-sm text-xs md:text-label-sm uppercase tracking-widest hover:bg-on-secondary-fixed-variant transition-all hover-glow inline-flex items-center gap-2 font-bold w-full sm:w-auto justify-center">
                     Submit Inquiry <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -112,3 +113,37 @@
     </div>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('contact_message');
+        const wordCountDisplay = document.getElementById('contact_word_count');
+        const maxWords = 300;
+
+        if (textarea && wordCountDisplay) {
+            textarea.addEventListener('input', function() {
+                let text = this.value.trim();
+                let words = text ? text.split(/\s+/) : [];
+                let wordCount = words.length;
+
+                if (wordCount > maxWords) {
+                    // Truncate to maxWords
+                    words = words.slice(0, maxWords);
+                    this.value = words.join(' ');
+                    wordCount = maxWords;
+                }
+
+                wordCountDisplay.textContent = `${wordCount} / ${maxWords} words`;
+                if (wordCount === maxWords) {
+                    wordCountDisplay.classList.add('text-error');
+                    wordCountDisplay.classList.remove('text-on-surface-variant');
+                } else {
+                    wordCountDisplay.classList.remove('text-error');
+                    wordCountDisplay.classList.add('text-on-surface-variant');
+                }
+            });
+        }
+    });
+</script>
+@endpush
