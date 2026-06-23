@@ -90,7 +90,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Your Name</label>
-                                <input type="text" name="name" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="John Doe" required>
+                                <input type="text" name="name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="John Doe" required>
                             </div>
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Email Address</label>
@@ -100,7 +100,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Phone Number</label>
-                                <input type="text" name="phone" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="+1 (555) 000-0000" required>
+                                <input type="tel" name="phone" pattern="^\+?[0-9\s\-\(\)]+$" title="Please enter a valid phone number" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="+1 (555) 000-0000" required>
                             </div>
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Seats / Tickets</label>
