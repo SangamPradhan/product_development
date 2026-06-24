@@ -9,7 +9,7 @@
     <!-- Author -->
     <div>
         <label for="author" class="block font-label-sm text-xs text-on-surface-variant uppercase mb-2">Author</label>
-        <input type="text" name="author" id="author" value="{{ old('author', $blog->author ?? 'Admin') }}" required
+        <input type="text" name="author" id="author" value="{{ old('author', $blog->author ?? 'Admin') }}" required pattern="^[A-Za-z\s\-\.]+$" title="Only letters, spaces, hyphens and dots are allowed"
                class="w-full bg-surface-container-low border border-outline rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-all font-body-md text-sm">
     </div>
 </div>
