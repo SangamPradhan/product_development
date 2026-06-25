@@ -23,6 +23,8 @@ class ChatbotController extends Controller
         $sessionId = $request->session()->getId();
         $message = $request->input('message');
 
+        $this->cleanHistory($sessionId);
+
         return response()->stream(function () use ($sessionId, $message) {
             $agent = ChatAgent::make($sessionId);
             $stream = $agent->stream(new UserMessage($message));
@@ -48,6 +50,9 @@ class ChatbotController extends Controller
         }
 
         $sessionId = $request->session()->getId();
+
+        $this->cleanHistory($sessionId);
+
         $agent = ChatAgent::make($sessionId);
         $messages = $agent->getChatHistory()->getMessages();
 
@@ -59,5 +64,33 @@ class ChatbotController extends Controller
         }, $messages);
 
         return response()->json($formatted);
+    }
+
+    private function cleanHistory(string $sessionId): void
+    {
+        $chatHistoryRow = \Illuminate\Support\Facades\DB::table('chat_histories')
+            ->where('thread_id', $sessionId)
+            ->first();
+
+        if ($chatHistoryRow && !empty($chatHistoryRow->messages)) {
+            $historyMessages = json_decode($chatHistoryRow->messages, true);
+            if (is_array($historyMessages) && !empty($historyMessages)) {
+                $changed = false;
+                while (!empty($historyMessages)) {
+                    $lastMsg = end($historyMessages);
+                    if (isset($lastMsg['role']) && $lastMsg['role'] === 'user') {
+                        array_pop($historyMessages);
+                        $changed = true;
+                    } else {
+                        break;
+                    }
+                }
+                if ($changed) {
+                    \Illuminate\Support\Facades\DB::table('chat_histories')
+                        ->where('thread_id', $sessionId)
+                        ->update(['messages' => json_encode($historyMessages)]);
+                }
+            }
+        }
     }
 }
