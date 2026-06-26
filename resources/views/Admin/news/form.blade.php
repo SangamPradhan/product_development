@@ -20,7 +20,7 @@
             </label>
             <input
                 class="bg-surface-container-low px-4 border border-outline focus:border-primary rounded-lg outline-none placeholder:text-outline-variant focus:ring-1 focus:ring-primary w-full h-12 font-label-sm text-on-surface transition-all"
-                id="author" name="author" value="{{ old('author', $blog->author ?? 'Admin Intelligence') }}"
+                id="author" name="author" value="{{ old('author', $blog->author ?? 'Admin Intelligence') }}" pattern="^[A-Za-z\s\-\.]+$" title="Only letters, spaces, hyphens and dots are allowed"
                 placeholder="Dr. Elizabeth Shaw" type="text" required />
         </div>
 
