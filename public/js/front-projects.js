@@ -195,10 +195,32 @@
             };
 
             try {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Submitting Review...',
+                        text: 'Please wait.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+
                 const response = await api.post(`/projects/${encodeURIComponent(projectSlug)}/reviews`, JSON.stringify(payload));
-                alertMsg.textContent = response?.message || 'Review submitted successfully!';
-                alertMsg.classList.remove('hidden');
-                alertMsg.classList.add('text-secondary');
+                
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: response?.message || 'Review submitted successfully!',
+                        confirmButtonColor: '#006e22'
+                    });
+                } else {
+                    alertMsg.textContent = response?.message || 'Review submitted successfully!';
+                    alertMsg.classList.remove('hidden');
+                    alertMsg.classList.add('text-secondary');
+                }
+                
                 form.reset();
                 
                 document.getElementById('selected-rating').value = '4';
@@ -211,9 +233,19 @@
             } catch (err) {
                 console.error('Submit review error:', err);
                 const errorMsg = err?.payload?.message || err.message || 'Failed to submit review. Please try again.';
-                alertMsg.textContent = errorMsg;
-                alertMsg.classList.remove('hidden');
-                alertMsg.classList.add('text-error');
+                
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: errorMsg,
+                        confirmButtonColor: '#ba1a1a'
+                    });
+                } else {
+                    alertMsg.textContent = errorMsg;
+                    alertMsg.classList.remove('hidden');
+                    alertMsg.classList.add('text-error');
+                }
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnHtml;
@@ -418,7 +450,7 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div class="flex flex-col gap-2">
                                         <label class="text-label-sm font-label-sm text-on-surface-variant">NAME</label>
-                                        <input id="reviewer_name" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="John Doe" type="text"/>
+                                        <input id="reviewer_name" oninput="this.value = this.value.replace(/[0-9]/g, '')" pattern="^[A-Za-z\\s\\-]+$" title="Only letters, spaces, and hyphens are allowed" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="John Doe" type="text"/>
                                     </div>
                                     <div class="flex flex-col gap-2">
                                         <label class="text-label-sm font-label-sm text-on-surface-variant">EMAIL</label>
@@ -427,7 +459,7 @@
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-label-sm font-label-sm text-on-surface-variant">DESIGNATION / COMPANY (OPTIONAL)</label>
-                                    <input id="reviewer_title" class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="e.g. CTO, Nexus Corp" type="text"/>
+                                    <input id="reviewer_title" oninput="this.value = this.value.replace(/[0-9]/g, '')" class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch" placeholder="e.g. CTO, Nexus Corp" type="text"/>
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-label-sm font-label-sm text-on-surface-variant">RATING</label>
@@ -443,6 +475,7 @@
                                 <div class="flex flex-col gap-2">
                                     <label class="text-label-sm font-label-sm text-on-surface-variant">YOUR REVIEW</label>
                                     <textarea id="review_comment" required class="bg-white border-outline-variant/30 focus:border-secondary focus:ring-0 p-3 text-body-md angled-notch resize-none" placeholder="Share your experience..." rows="4"></textarea>
+                                    <div id="review_word_count" class="text-xs text-on-surface-variant text-right">0 / 300 words</div>
                                 </div>
                                 <button class="w-full bg-secondary text-white py-4 angled-notch font-bold text-label-sm uppercase tracking-widest hover:bg-secondary-fixed hover:text-on-secondary-fixed transition-colors flex justify-center items-center gap-2" type="submit">
                                     <span>Post Review</span>
@@ -471,6 +504,33 @@
         initStarRating();
         initReviewSubmit(project.slug);
         loadAndRenderReviews(project.slug);
+
+        // Word count for review
+        const textarea = document.getElementById('review_comment');
+        const wordCountDisplay = document.getElementById('review_word_count');
+        const maxWords = 300;
+        if (textarea && wordCountDisplay) {
+            textarea.addEventListener('input', function() {
+                let text = this.value.trim();
+                let words = text ? text.split(/\\s+/) : [];
+                let wordCount = words.length;
+
+                if (wordCount > maxWords) {
+                    words = words.slice(0, maxWords);
+                    this.value = words.join(' ');
+                    wordCount = maxWords;
+                }
+
+                wordCountDisplay.textContent = `${wordCount} / ${maxWords} words`;
+                if (wordCount === maxWords) {
+                    wordCountDisplay.classList.add('text-error');
+                    wordCountDisplay.classList.remove('text-on-surface-variant');
+                } else {
+                    wordCountDisplay.classList.remove('text-error');
+                    wordCountDisplay.classList.add('text-on-surface-variant');
+                }
+            });
+        }
 
         if (typeof AOS !== 'undefined') {
             setTimeout(() => {
