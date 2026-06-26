@@ -85,12 +85,12 @@
                 <!-- Collapsible Booking Form Card -->
                 <div id="booking-form-container" class="hidden mt-8 pt-8 border-t border-outline-variant/30">
                     <h3 class="text-headline-md font-headline-md mb-6">Register for this Event</h3>
-                    <form action="{{ route('front.event.book', $event->id) }}" method="POST" class="space-y-6">
+                    <form id="event-booking-form" action="{{ route('front.event.book', $event->id) }}" method="POST" class="space-y-6">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Your Name</label>
-                                <input type="text" name="name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="John Doe" required>
+                                <input type="text" name="name" oninput="this.value = this.value.replace(/[0-9]/g, '')" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md" placeholder="John Doe" required>
                             </div>
                             <div>
                                 <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase">Email Address</label>
@@ -222,5 +222,23 @@
             }
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const bookingForm = document.getElementById('event-booking-form');
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', function() {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Processing Registration...',
+                        text: 'Please wait while we secure your seat.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+            });
+        }
+    });
 </script>
 @endpush
