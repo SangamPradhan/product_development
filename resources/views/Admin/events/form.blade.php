@@ -10,6 +10,7 @@
     <div>
         <label for="category" class="block font-label-sm text-xs text-on-surface-variant uppercase mb-2">Category</label>
         <input type="text" name="category" id="category" value="{{ old('category', $event->category ?? '') }}" required
+               pattern="^[A-Za-z\s\-\&]+$" title="Only letters, spaces, hyphens, and ampersands are allowed"
                placeholder="e.g. Workshop, Conference, Webinar"
                class="w-full bg-surface-container-low border border-outline rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary transition-all font-body-md text-sm">
     </div>
