@@ -28,16 +28,16 @@
         <!-- Contact Form Card -->
         <div class="md:col-span-8 bg-surface-container-low border border-outline-variant p-6 md:p-10 angled-notch hover-glow transition-all mb-8 md:mb-0" data-aos="fade-right">
             <h2 class="text-headline-md text-xl md:text-headline-md mb-6 md:mb-8 font-bold">Send us a message</h2>
-            <form action="{{ route('front.contact.store') }}" method="POST" class="space-y-6">
+            <form id="contact-form" action="{{ route('front.contact.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase font-bold text-xs">First Name</label>
-                        <input type="text" name="first_name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="John" required>
+                        <input type="text" name="first_name" oninput="this.value = this.value.replace(/[0-9]/g, '')" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="John" required>
                     </div>
                     <div>
                         <label class="block text-label-sm font-label-sm text-outline mb-2 uppercase font-bold text-xs">Last Name</label>
-                        <input type="text" name="last_name" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="Doe" required>
+                        <input type="text" name="last_name" oninput="this.value = this.value.replace(/[0-9]/g, '')" pattern="^[A-Za-z\s\-]+$" title="Only letters, spaces, and hyphens are allowed" class="w-full bg-surface border border-outline-variant p-4 focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all font-body-md rounded-lg" placeholder="Doe" required>
                     </div>
                 </div>
                 <div>
@@ -141,6 +141,22 @@
                 } else {
                     wordCountDisplay.classList.remove('text-error');
                     wordCountDisplay.classList.add('text-on-surface-variant');
+                }
+            });
+        }
+
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function() {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Submitting Inquiry...',
+                        text: 'Please wait while we process your request.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
                 }
             });
         }
