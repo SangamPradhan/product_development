@@ -12,6 +12,8 @@ use App\Models\ContactMessage;
 use App\Models\EventBooking;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use App\Mail\ContactFormMail;
+use App\Mail\EventBookingMail;
 
 class FrontController extends Controller
 {
@@ -215,35 +217,47 @@ class FrontController extends Controller
     public function contactStore(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:255',
+            'last_name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:255',
             'email' => 'required|email|max:255',
             'type' => 'required|string|max:255',
             'message' => 'required|string',
+        ], [
+            'first_name.regex' => 'The first name cannot contain numbers or special characters.',
+            'last_name.regex' => 'The last name cannot contain numbers or special characters.',
+            'email.email' => 'Please enter a valid email address.',
         ]);
 
-        $message = ContactMessage::create($validated);
-        $fullName = $message->fullName;
+        // Manually block common dummy/fake mail generators
+        $disposableDomains = ['mailinator.com', 'guerrillamail.com', '10minutemail.com', 'tempmail.com', 'yopmail.com'];
+        $domain = substr(strrchr($validated['email'], "@"), 1);
+        
+        if (in_array(strtolower($domain), $disposableDomains)) {
+            return redirect()->back()->with('error', 'Disposable or fake email addresses are not allowed. Please provide a valid email.');
+        }
 
-        $mailError = null;
+        if (!checkdnsrr($domain, 'MX')) {
+            return redirect()->back()->with('error', "The email domain '$domain' does not exist or cannot receive emails.");
+        }
+
         try {
-            Mail::send('emails.contact_thanks', [
-                'name' => $fullName,
-                'type' => $message->type,
-                'msg' => $message->message,
-            ], function ($mail) use ($message, $fullName) {
-                $mail->to($message->email, $fullName)
-                     ->subject('We have received your inquiry - AI-Solutions');
-            });
-        } catch (\Throwable $e) {
-            $mailError = $e->getMessage();
-        }
+            // 1. ATTEMPT TO SEND EMAIL FIRST
+            // If the system fails to send the email, it will throw an error and instantly jump to the catch block below.
+            Mail::to($validated['email'])->send(new ContactFormMail($validated));
 
-        if ($mailError) {
-            return redirect()->back()->with('error', 'Inquiry submitted successfully, but we could not send a confirmation email. Details: ' . $mailError . '. Please verify if your email address is correct and try again.');
-        }
+            // 2. STORE DATA
+            // This line will ONLY execute if the email above was successfully sent without errors.
+            ContactMessage::create($validated);
 
-        return redirect()->back()->with('success', 'Thank you! Your inquiry has been submitted and a confirmation email has been sent.');
+            // 3. SHOW SUCCESS MESSAGE
+            return redirect()->back()->with('success', 'Thank you! Your inquiry has been submitted and a confirmation email has been sent.');
+            
+        } catch (\Exception $e) {
+            // 4. ABORT AND SHOW ERROR MESSAGE
+            // If the email fails, the process lands here. Data is NOT saved.
+            \Log::error('Contact form email failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'We encountered an issue sending a confirmation email to the address provided. Please ensure your email is correct and try again.');
+        }
     }
 
     public function bookEvent(Request $request, $id)
@@ -255,36 +269,43 @@ class FrontController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:255',
             'seats' => 'required|integer|min:1|max:10',
             'message' => 'nullable|string',
+        ], [
+            'name.regex' => 'The name cannot contain numbers or special characters.',
+            'email.email' => 'Please enter a valid email address.',
         ]);
 
-        $validated['event_id'] = $event->id;
-        $booking = EventBooking::create($validated);
+        // Manually block common dummy/fake mail generators
+        $disposableDomains = ['mailinator.com', 'guerrillamail.com', '10minutemail.com', 'tempmail.com', 'yopmail.com'];
+        $domain = substr(strrchr($validated['email'], "@"), 1);
+        
+        if (in_array(strtolower($domain), $disposableDomains)) {
+            return redirect()->back()->with('error', 'Disposable or fake email addresses are not allowed. Please provide a valid email.');
+        }
 
-        $mailError = null;
+        if (!checkdnsrr($domain, 'MX')) {
+            return redirect()->back()->with('error', "The email domain '$domain' does not exist or cannot receive emails.");
+        }
+
         try {
-            Mail::send('emails.event_booking', [
-                'name' => $booking->name,
-                'eventTitle' => $event->title,
-                'eventDate' => $event->event_date->format('M d, Y h:i A'),
-                'location' => $event->location,
-                'seats' => $booking->seats,
-            ], function ($mail) use ($booking, $event) {
-                $mail->to($booking->email, $booking->name)
-                     ->subject('Event Booking Confirmed: ' . $event->title);
-            });
-        } catch (\Throwable $e) {
-            $mailError = $e->getMessage();
-        }
+            // 1. ATTEMPT TO SEND EMAIL FIRST
+            Mail::to($validated['email'])->send(new EventBookingMail($validated, $event));
 
-        if ($mailError) {
-            return redirect()->back()->with('error', 'Booking successful, but we could not send a confirmation email. Details: ' . $mailError . '. Please check if your email address is correct.');
-        }
+            // 2. STORE DATA (Only executes if email succeeds)
+            $validated['event_id'] = $event->id;
+            EventBooking::create($validated);
 
-        return redirect()->back()->with('success', 'Congratulations! Your seat is booked successfully, and a confirmation email has been sent.');
+            // 3. SHOW SUCCESS MESSAGE
+            return redirect()->back()->with('success', 'Congratulations! Your seat is booked successfully, and a confirmation email has been sent.');
+
+        } catch (\Exception $e) {
+            // 4. ABORT AND SHOW ERROR MESSAGE
+            \Log::error('Event booking email failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Booking failed. We encountered an issue sending a confirmation email to the address provided. Please ensure your email is correct and try again.');
+        }
     }
 }
